@@ -45,6 +45,7 @@ class Dataset(Configurable):
     
     self._vocabs = vocabs
     self._multibuckets = [Multibucket.from_configurable(vocab, name='%s-%s'%(self.name, vocab.name)) for vocab in self.vocabs]
+    self._metadata=[]
     
     if nlp_model is not None:
       self._nlp_model = nlp_model.from_configurable(self, name=self.name)
@@ -52,12 +53,13 @@ class Dataset(Configurable):
       self._nlp_model = None
     
     with Bucketer.from_configurable(self, self.n_buckets, name='bucketer-%s'%self.name) as bucketer:
-      splits = bucketer.compute_splits(len(sent) for sent in self.iterfiles())
+      splits = bucketer.compute_splits(len(sent) for sent,metadata in self.iterfiles())
       for i in range(len(splits)):
         splits[i] += 1
     for multibucket, vocab in self.iteritems():
       multibucket.open(splits, depth=vocab.depth)
-    for sent in self.iterfiles():
+    for sent,metadata in self.iterfiles():
+      self._metadata.append(metadata)
       for multibucket, vocab in self.iteritems():
         tokens = [line[vocab.conll_idx] for line in sent]
         idxs = [vocab.ROOT] + [vocab.index(token) for token in tokens]
@@ -76,19 +78,28 @@ class Dataset(Configurable):
   #=============================================================
   def iterfiles(self):
     """"""
-    
+    #0 1    2     3     4     5     6    7     8     9
+    ID,FORM,LEMMA,UPOS,XPOS,FEATS,HEAD,DEPREL,DEPS,MISC=range(10)
     for data_file in self.data_files:
       with codecs.open(data_file, encoding='utf-8', errors='ignore') as f:
         buff = []
+        metadata = {"comments":[],"miscfield":[],"feats":[]}
         for line in f:
           line = line.strip()
-          if line and not line.startswith('#'):
-            if not re.match('[0-9]+[-.][0-9]+', line):
-              buff.append(line.split('\t'))
+          if line:
+            if not line.startswith('#'):
+              if not re.match('[0-9]+[-.][0-9]+', line):
+                cols=line.split("\t")
+                metadata["miscfield"].append(cols[MISC])
+                metadata["feats"].append(cols[FEATS])
+                buff.append(cols)
+            else:
+              metadata["comments"].append(line)
           elif buff:
-            yield buff
+            yield buff, metadata
             buff = []
-        yield buff
+            metadata = {"comments":[],"miscfield":[],"feats":[]}
+        yield buff, metadata
   
   #=============================================================
   def iterbatches(self, shuffle=True, return_check=False):
@@ -151,8 +162,8 @@ class Dataset(Configurable):
   def print_accuracy(self, accumulators, time):
     return self._nlp_model.print_accuracy(accumulators, time, prefix=self.PREFIX.title())
   
-  def write_probs(self, sents, output_file, probs):
-    return self._nlp_model.write_probs(sents, output_file, probs, self.multibucket.inv_idxs())
+  def write_probs(self, sents, output_file, probs, metadata):
+    return self._nlp_model.write_probs(sents, output_file, probs, self.multibucket.inv_idxs(), metadata)
 
   def check(self, preds, sents, fileobj):
     return self._nlp_model.check(preds, sents, fileobj)

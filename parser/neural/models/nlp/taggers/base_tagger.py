@@ -123,7 +123,7 @@ class BaseTagger(NN):
     return
 
   #=============================================================
-  def write_probs(self, sents, output_file, probs, inv_idxs):
+  def write_probs(self, sents, output_file, probs, inv_idxs, metadata):
     """"""
     
     # Turns list of tuples of tensors into list of matrices
@@ -132,15 +132,19 @@ class BaseTagger(NN):
     tokens = [sent for batch in sents for sent in batch]
     
     with codecs.open(output_file, 'w', encoding='utf-8', errors='ignore') as f:
-      for i in inv_idxs:
+      for meta_idx,i in enumerate(inv_idxs):
         sent, tag_prob, weights = tokens[i], tag_probs[i], tokens_to_keep[i]
         sent = list(zip(*sent))
         tag_preds = np.argmax(tag_prob, axis=1)
-        for token, tag_pred, weight in zip(sent, tag_preds[1:], weights[1:]):
+        sent_meta=metadata[meta_idx]
+        if sent_meta["comments"]:
+          f.write("\n".join(sent_meta["comments"]))
+          f.write("\n")
+        for tok_idx,(token, tag_pred, weight) in enumerate(zip(sent, tag_preds[1:], weights[1:])):
           token = list(token)
-          token.insert(5, '_')
+          token.insert(5, sent_meta["feats"][tok_idx])
           token.append('_')
-          token.append('_')
+          token.append(sent_meta["miscfield"][tok_idx])
           token[3] = self.vocabs['tags'][tag_pred]
           f.write('\t'.join(token)+'\n')
         f.write('\n')

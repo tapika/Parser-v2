@@ -278,7 +278,7 @@ class Network(Configurable):
           for feed_dict, tokens in parseset.iterbatches(shuffle=False):
             probs.append(sess.run(parse_outputs, feed_dict=feed_dict))
             sents.append(tokens)
-          parseset.write_probs(sents, output_path, probs)
+          parseset.write_probs(sents, output_path, probs, parseset._metadata)
       del trainset
       del parseset
       print('Finished one')
