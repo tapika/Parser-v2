@@ -15,18 +15,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import os
 import codecs
 import gzip
 import warnings
-try:
-  from backports import lzma
-except:
-  warnings.warn('Install backports.lzma for xz support')
+import lzma
+
 from collections import Counter
 
 import numpy as np

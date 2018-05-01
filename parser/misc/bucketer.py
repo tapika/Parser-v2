@@ -15,9 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import os
 from collections import Counter
@@ -60,7 +60,7 @@ class Bucketer(Configurable):
     self._lengths = sorted(self.len2cnt.keys())
     
     # Initialize the splits evenly
-    lengths = sorted([l for length, count in len2cnt.items() for l in [length]*count])
+    lengths = sorted([l for length, count in list(len2cnt.items()) for l in [length]*count])
     self._splits = [np.max(split) for split in np.array_split(lengths, self.k)]
     
     # Make sure all the splits are ordered correctly and present in the len2cnt
@@ -112,7 +112,7 @@ class Bucketer(Configurable):
   def recenter(self):
     """"""
     
-    for idx in xrange(len(self)-1):
+    for idx in range(len(self)-1):
       split = self[idx]
       lidx = self.lidxs[idx]
       old_size = self.size()
@@ -156,8 +156,8 @@ class Bucketer(Configurable):
   def plot(self, use_poisson=False):
     """"""
     
-    x = np.array(self.len2cnt.keys(), dtype=np.float32)
-    y = np.array(self.len2cnt.values(), dtype=np.float32)
+    x = np.array(list(self.len2cnt.keys()), dtype=np.float32)
+    y = np.array(list(self.len2cnt.values()), dtype=np.float32)
     y /= np.sum(y)
     mean = np.sum(x*y)
     var = np.sum((x-mean)**2*y)
@@ -251,5 +251,5 @@ if __name__ == '__main__':
   
   from scipy.stats import truncnorm
   with Bucketer(5) as bucketer:
-    print(bucketer.compute_splits([[0] * np.int(truncnorm(0, 10, scale=5).rvs()) for _ in xrange(1000)]))
+    print(bucketer.compute_splits([[0] * np.int(truncnorm(0, 10, scale=5).rvs()) for _ in range(1000)]))
     bucketer.plot()

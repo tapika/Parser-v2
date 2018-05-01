@@ -15,5 +15,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from sgd_optimizer import SGDOptimizer 
-from radam_optimizer import RadamOptimizer
+from .sgd_optimizer import SGDOptimizer 
+from .radam_optimizer import RadamOptimizer

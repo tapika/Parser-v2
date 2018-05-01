@@ -15,9 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import os
 import re
@@ -44,8 +44,8 @@ class BaseVocab(Configurable):
     self._special_tokens_set = set(self._special_tokens)
     self._set_special_tokens()
     # NOTE: __setattr__ turns these into dicts
-    self._str2idx = zip(self.special_tokens, range(len(self.special_tokens)))
-    self._idx2str = zip(range(len(self.special_tokens)), self.special_tokens)
+    self._str2idx = list(zip(self.special_tokens, list(range(len(self.special_tokens)))))
+    self._idx2str = list(zip(list(range(len(self.special_tokens))), self.special_tokens))
     self._tok2idx = self._str2idx
     self._counts = None
     self._embeddings = None
@@ -114,11 +114,11 @@ class BaseVocab(Configurable):
   
   #=============================================================
   def strings(self):
-    return self._str2idx.keys()
+    return list(self._str2idx.keys())
   def indices(self):
-    return self._str2idx.values()
+    return list(self._str2idx.values())
   def iteritems(self):
-    return self._str2idx.iteritems()
+    return iter(self._str2idx.items())
   def most_common(self, n=None):
     return self._counts.most_common(n)
   def index(self, token):
@@ -153,11 +153,11 @@ class BaseVocab(Configurable):
   
   #=============================================================
   def __getitem__(self, key):
-    if isinstance(key, basestring):
+    if isinstance(key, str):
       if not self.cased and key not in self._special_tokens_set:
         key = key.lower()
       return self._str2idx.get(key, self.UNK)
-    elif isinstance(key, (int, long, np.int32, np.int64)):
+    elif isinstance(key, (int, np.int32, np.int64)):
       return self._idx2str.get(key, self.special_tokens[self.UNK])
     elif hasattr(key, '__iter__'):
       return [self[k] for k in key]
@@ -166,12 +166,12 @@ class BaseVocab(Configurable):
     return
   
   def __setitem__(self, key, value):
-    if isinstance(key, basestring):
+    if isinstance(key, str):
       if not self.cased and key not in self._special_tokens_set:
         key = key.lower()
       self._str2idx[key] = value
       self._idx2str[value] = key
-    elif isinstance(key, (int, long)):
+    elif isinstance(key, int):
       if not self.cased and value not in self._special_tokens_set:
         value = value.lower()
       self._idx2str[key] = value
@@ -183,11 +183,11 @@ class BaseVocab(Configurable):
       raise ValueError('keys and values to BaseVocab.__setitem__ must be (iterable of) string or integer')
   
   def __contains__(self, key):
-    if isinstance(key, basestring):
+    if isinstance(key, str):
       if not self.cased and key not in self._special_tokens_set:
         key = key.lower()
       return key in self._str2idx
-    elif isinstance(key, (int, long)):
+    elif isinstance(key, int):
       return key in self._idx2str
     else:
       raise ValueError('key to BaseVocab.__contains__ must be string or integer')

@@ -15,9 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import os
 import re
@@ -29,7 +29,7 @@ import numpy as np
 import tensorflow as tf
 
 try:
-  from ConfigParser import SafeConfigParser, NoOptionError
+  from configparser import SafeConfigParser, NoOptionError
 except ImportError:
   from configparser import SafeConfigParser, NoOptionError
   
@@ -88,10 +88,10 @@ class Configurable(object):
     config_options = set()
     for section in config.sections():
       config_options.update(config.options(section))
-    for kw, arg in kwargs.iteritems():
+    for kw, arg in kwargs.items():
       if isinstance(arg, dict):
         section = config_sections[kw]
-        for option, value in arg.iteritems():
+        for option, value in arg.items():
           assert option in config_options
           config.set(section, option, str(value))
       else:

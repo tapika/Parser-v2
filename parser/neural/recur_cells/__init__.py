@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from rnn_cell import RNNCell 
-from gru_cell import GRUCell
-from cif_lstm_cell import CifLSTMCell
-from lstm_cell import LSTMCell
+from .rnn_cell import RNNCell 
+from .gru_cell import GRUCell
+from .cif_lstm_cell import CifLSTMCell
+from .lstm_cell import LSTMCell

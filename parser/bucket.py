@@ -15,9 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import numpy as np
 import tensorflow as tf
@@ -110,7 +110,7 @@ class Bucket(Configurable):
     indices = []
     for multibucket in dataset:
       indices.append(multibucket[bkt_idx].indices)
-    for i in xrange(len(indices)):
+    for i in range(len(indices)):
       if len(indices[i].shape) == 2:
         indices[i] = indices[i][:,:,None]
     bucket._indices = np.concatenate(indices, axis=2)

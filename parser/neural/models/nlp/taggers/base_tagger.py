@@ -15,9 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import re
 import codecs
@@ -47,7 +47,7 @@ class BaseTagger(NN):
     
     input_vocabs = [self.vocabs[name] for name in self.input_vocabs]
     embed = self.embed_concat(input_vocabs)
-    for vocab in self.vocabs.values():
+    for vocab in list(self.vocabs.values()):
       if vocab not in input_vocabs:
         vocab.generate_placeholder()
     placeholder = self.vocabs['words'].placeholder
@@ -60,7 +60,7 @@ class BaseTagger(NN):
     self._n_tokens = tf.to_int32(tf.reduce_sum(self.tokens_to_keep))
     
     top_recur = embed
-    for i in xrange(self.n_layers):
+    for i in range(self.n_layers):
       with tf.variable_scope('RNN%d' % i):
         top_recur, _ = self.RNN(top_recur, self.recur_size)
     return top_recur
@@ -87,7 +87,7 @@ class BaseTagger(NN):
     """"""
     
     acc_dict = self.process_accumulators(accumulators)
-    for key, value in acc_dict.iteritems():
+    for key, value in acc_dict.items():
       history[key].append(value)
     return history['TS'][-1]
   
@@ -116,7 +116,7 @@ class BaseTagger(NN):
     """"""
 
     for tokens, preds in zip(sents, preds[0]):
-      for token, pred in zip(zip(*tokens), preds):
+      for token, pred in zip(list(zip(*tokens)), preds):
         tag = self.vocabs['tags'][pred]
         fileobj.write('\t'.join(token+(tag, ))+'\n')
       fileobj.write('\n')
@@ -134,7 +134,7 @@ class BaseTagger(NN):
     with codecs.open(output_file, 'w', encoding='utf-8', errors='ignore') as f:
       for i in inv_idxs:
         sent, tag_prob, weights = tokens[i], tag_probs[i], tokens_to_keep[i]
-        sent = zip(*sent)
+        sent = list(zip(*sent))
         tag_preds = np.argmax(tag_prob, axis=1)
         for token, tag_pred, weight in zip(sent, tag_preds[1:], weights[1:]):
           token = list(token)

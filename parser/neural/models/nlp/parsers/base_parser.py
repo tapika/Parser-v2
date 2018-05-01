@@ -15,9 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import re
 import codecs
@@ -49,7 +49,7 @@ class BaseParser(NN):
     input_vocabs = [self.vocabs[name] for name in self.input_vocabs]
     #embed = tf.concat([vocab(moving_params=self.moving_params) for vocab in input_vocabs], 2)
     embed = self.embed_concat(input_vocabs)
-    for vocab in self.vocabs.values():
+    for vocab in list(self.vocabs.values()):
       if vocab not in input_vocabs:
         vocab.generate_placeholder()
     placeholder = self.vocabs['words'].placeholder
@@ -62,7 +62,7 @@ class BaseParser(NN):
     self._n_tokens = tf.to_int32(tf.reduce_sum(self.tokens_to_keep))
     
     top_recur = embed
-    for i in xrange(self.n_layers):
+    for i in range(self.n_layers):
       with tf.variable_scope('RNN%d' % i):
         top_recur, _ = self.RNN(top_recur, self.recur_size)
     return top_recur
@@ -91,7 +91,7 @@ class BaseParser(NN):
     """"""
     
     acc_dict = self.process_accumulators(accumulators)
-    for key, value in acc_dict.iteritems():
+    for key, value in acc_dict.items():
       history[key].append(value)
     return history['LAS'][-1]
   
@@ -122,7 +122,7 @@ class BaseParser(NN):
     """"""
 
     for tokens, arc_preds, rel_preds in zip(sents, preds[0], preds[1]):
-      for token, arc_pred, rel_pred in zip(zip(*tokens), arc_preds, rel_preds):
+      for token, arc_pred, rel_pred in zip(list(zip(*tokens)), arc_preds, rel_preds):
         arc = self.vocabs['heads'][arc_pred]
         rel = self.vocabs['rels'][rel_pred]
         fileobj.write('\t'.join(token+(arc, rel))+'\n')
@@ -145,7 +145,7 @@ class BaseParser(NN):
       j = 0
       for i in inv_idxs:
         sent, arc_prob, rel_prob, weights = tokens[i], arc_probs[i], rel_probs[i], tokens_to_keep[i]
-        sent = zip(*sent)
+        sent = list(zip(*sent))
         sequence_length = int(np.sum(weights))+1
         arc_prob = arc_prob[:sequence_length][:,:sequence_length]
         #arc_preds = np.argmax(arc_prob, axis=1)

@@ -15,9 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import os
 import re
@@ -77,7 +77,7 @@ class Multivocab(Configurable):
   #=============================================================
   def _set_special_tokens(self):
     pattern = re.compile('\W+', re.UNICODE)
-    self._special_tokens = zip(*[vocab.special_tokens for vocab in self])
+    self._special_tokens = list(zip(*[vocab.special_tokens for vocab in self]))
     for i, token in enumerate(self.special_tokens):
       n = len(token)
       assert len(set(token)) == 1
@@ -87,7 +87,7 @@ class Multivocab(Configurable):
       token = token.upper()
       token = pattern.sub('', token)
       assert token not in self.__dict__
-      self.__dict__[token] = tuple(i for _ in xrange(n))
+      self.__dict__[token] = tuple(i for _ in range(n))
     return
   
   #=============================================================

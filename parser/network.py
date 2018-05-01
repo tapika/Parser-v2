@@ -15,15 +15,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import gc
 import os
 import time
 import codecs
-import cPickle as pkl
+import pickle as pkl
 from collections import defaultdict
 import os.path as op
 
@@ -298,10 +298,10 @@ class Network(Configurable):
     return self._optimizer
   @property
   def save_vars(self):
-    return filter(lambda x: u'Pretrained/Embeddings:0' != x.name, tf.global_variables())
+    return [x for x in tf.global_variables() if 'Pretrained/Embeddings:0' != x.name]
   @property
   def non_save_vars(self):
-    return filter(lambda x: u'Pretrained/Embeddings:0' == x.name, tf.global_variables())
+    return [x for x in tf.global_variables() if 'Pretrained/Embeddings:0' == x.name]
   @property
   def global_step(self):
     return self._global_step

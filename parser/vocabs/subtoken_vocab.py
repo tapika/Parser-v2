@@ -15,9 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import os
 import codecs
@@ -136,14 +136,14 @@ class SubtokenVocab(TokenVocab):
     self._tok2idx = {}
     tok2idxs = {token: self.subtoken_indices(token) for token in self.token_vocab.counts}
     with Bucketer.from_configurable(self, self.n_buckets, name='bucketer-%s'%self.name) as bucketer:
-      splits = bucketer.compute_splits(len(indices) for indices in tok2idxs.values())
+      splits = bucketer.compute_splits(len(indices) for indices in list(tok2idxs.values()))
     with self.multibucket.open(splits):
       for index, special_token in enumerate(self.token_vocab.special_tokens):
         index = index if index != self.token_vocab.UNK else self.META_UNK
         self.tok2idx[special_token] = self.multibucket.add([index])
       for token, _ in self.sorted_counts(self.token_vocab.counts):
         self.tok2idx[token] = self.multibucket.add(tok2idxs[token])
-    self._idx2tok = {idx: tok for tok, idx in self.tok2idx.iteritems()}
+    self._idx2tok = {idx: tok for tok, idx in self.tok2idx.items()}
     self._idx2tok[0] = self[self.PAD]
     return
   

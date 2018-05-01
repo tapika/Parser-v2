@@ -15,9 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import os
 import codecs
@@ -76,7 +76,7 @@ class NgramVocab(SubtokenVocab):
         idxs = self.subtoken_vocab.subtoken_indices(token)
         idxs = [self.subtoken_vocab.START] + idxs + [self.subtoken_vocab.STOP]
         if len(idxs) > self.n:
-          for i in xrange(len(idxs) - self.n):
+          for i in range(len(idxs) - self.n):
             subtoken = ''.join(self.subtoken_vocab[idxs[i:i+self.n]])
             self.counts[subtoken] += 1
             self.token_counts[subtoken] += self.token_vocab.counts[token]
@@ -92,7 +92,7 @@ class NgramVocab(SubtokenVocab):
       return [self.PAD]
     else:
       subtokens = []
-      for i in xrange(len(idxs) - self.n):
+      for i in range(len(idxs) - self.n):
         subtokens.append(''.join(self.subtoken_vocab[idxs[i:i+self.n]]))
       return self[subtokens]
   

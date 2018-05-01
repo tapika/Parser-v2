@@ -15,9 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import numpy as np
 import tensorflow as tf
@@ -83,7 +83,7 @@ class Multibucket(Configurable):
     prevlen = -1
     for idx, maxlen in enumerate(maxlens):
       self._buckets.append(Bucket.from_configurable(self, embed_model=self.embed_model, name='%s-%d' % (self.name, idx)).open(maxlen, depth=depth))
-      self._len2idx.update(zip(range(prevlen+1, maxlen+1), [idx]*(maxlen-prevlen)))
+      self._len2idx.update(list(zip(list(range(prevlen+1, maxlen+1)), [idx]*(maxlen-prevlen))))
       prevlen = maxlen
     return self
   
@@ -113,7 +113,7 @@ class Multibucket(Configurable):
   def inv_idxs(self):
     """"""
     
-    return np.argsort(np.concatenate([np.where(self.indices['bkt_idx'][1:] == bkt_idx)[0] for bkt_idx in xrange(len(self))]))
+    return np.argsort(np.concatenate([np.where(self.indices['bkt_idx'][1:] == bkt_idx)[0] for bkt_idx in range(len(self))]))
   
   #=============================================================
   def get_tokens(self, bkt_idx, batch):
@@ -133,7 +133,7 @@ class Multibucket(Configurable):
     #for i in xrange(1, len(indices)):
     #  assert np.equal(indices[0].astype(int), indices[i].astype(int)).all()
     multibucket._indices = np.array(multibucket_.indices)
-    buckets = [Bucket.from_dataset(dataset, i, *args, **kwargs) for i in xrange(len(multibucket_))]
+    buckets = [Bucket.from_dataset(dataset, i, *args, **kwargs) for i in range(len(multibucket_))]
     multibucket._buckets = buckets
     if dataset.verbose:
       for bucket in multibucket:

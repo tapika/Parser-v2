@@ -15,6 +15,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from mlp_embed import MLPEmbed
-from rnn_embed import RNNEmbed
-from cnn_embed import CNNEmbed
+from .mlp_embed import MLPEmbed
+from .rnn_embed import RNNEmbed
+from .cnn_embed import CNNEmbed

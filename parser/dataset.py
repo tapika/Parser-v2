@@ -15,9 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import re
 import codecs
@@ -53,12 +53,12 @@ class Dataset(Configurable):
     
     with Bucketer.from_configurable(self, self.n_buckets, name='bucketer-%s'%self.name) as bucketer:
       splits = bucketer.compute_splits(len(sent) for sent in self.iterfiles())
-      for i in xrange(len(splits)):
+      for i in range(len(splits)):
         splits[i] += 1
-    for multibucket, vocab in self.iteritems():
+    for multibucket, vocab in self.items():
       multibucket.open(splits, depth=vocab.depth)
     for sent in self.iterfiles():
-      for multibucket, vocab in self.iteritems():
+      for multibucket, vocab in self.items():
         tokens = [line[vocab.conll_idx] for line in sent]
         idxs = [vocab.ROOT] + [vocab.index(token) for token in tokens]
         multibucket.add(idxs, tokens)
@@ -120,7 +120,7 @@ class Dataset(Configurable):
     for bkt_idx, batch in batches:
       feed_dict = {}
       tokens = []
-      for multibucket, vocab in self.iteritems():
+      for multibucket, vocab in self.items():
         bucket = multibucket[bkt_idx]
         indices = bucket.indices[batch]
         vocab.set_feed_dict(indices, feed_dict)
@@ -135,13 +135,13 @@ class Dataset(Configurable):
         elif not shuffle:
           tokens.append(bucket.get_tokens(batch))
       if not shuffle or return_check:
-        yield feed_dict, zip(*tokens)
+        yield feed_dict, list(zip(*tokens))
       else:
         yield feed_dict
   
   #=============================================================
   def iteritems(self):
-    for i in xrange(len(self)):
+    for i in range(len(self)):
       yield (self[i], self._vocabs[i])
   
   #=============================================================

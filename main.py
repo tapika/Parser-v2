@@ -15,9 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import re
 import os
@@ -53,7 +53,7 @@ def train(save_dir, **kwargs):
   load = kwargs.pop('load')
   try:
     if not load and os.path.isdir(save_dir):
-      raw_input('Save directory already exists. Press <Enter> to continue or <Ctrl-c> to abort.')
+      input('Save directory already exists. Press <Enter> to continue or <Ctrl-c> to abort.')
       if os.path.isfile(os.path.join(save_dir, 'config.cfg')):
         os.remove(os.path.join(save_dir, 'config.cfg'))
   except KeyboardInterrupt:
@@ -102,8 +102,8 @@ parse_parser.add_argument('--output_dir')
 kwargs = vars(argparser.parse_args())
 action = kwargs.pop('action')
 save_dir = kwargs.pop('save_dir')
-kwargs = {key: value for key, value in kwargs.iteritems() if value is not None}
-for section, values in kwargs.iteritems():
+kwargs = {key: value for key, value in kwargs.items() if value is not None}
+for section, values in kwargs.items():
   if section in section_names:
     values = [value.split('=', 1) for value in values]
     kwargs[section] = {opt: value for opt, value in values}

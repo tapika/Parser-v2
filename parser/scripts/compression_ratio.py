@@ -15,9 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import os
 import re
@@ -49,13 +49,13 @@ if __name__ == '__main__':
           if not re.match('#|[0-9]+[-.][0-9]+', line):
             type_counter[line.split('\t')[1]] += 1
   
-  types = type_counter.keys()
+  types = list(type_counter.keys())
   total = sum(type_counter.values())
   probs = [type_counter[type_] / total for type_ in types]
   
   trials = []
   n_words = min(args.n_words, len(types)) or len(types)
-  for _ in xrange(args.k_trials):
+  for _ in range(args.k_trials):
     chosen_types = np.random.choice(types, size=n_words, replace=False, p=probs)
     with codecs.open('uncompressed.txt', 'w', encoding='utf-8', errors='ignore') as f:
       f.write('\n'.join(chosen_types))

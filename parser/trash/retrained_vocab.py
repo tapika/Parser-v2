@@ -15,9 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import os
 import codecs
@@ -78,7 +78,7 @@ class RetrainedVocab(BaseVocab):
     
     matrix = self.embeddings.eval()
     with codecs.open(self.name+'.txt', 'w') as f:
-      for idx in xrange(self.START_IDX, len(self)):
+      for idx in range(self.START_IDX, len(self)):
         f.write('%s %s\n' % (self[idx], ' '.join(matrix[idx])))
     return
   

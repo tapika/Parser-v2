@@ -15,9 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import os
 import re
@@ -54,7 +54,7 @@ class DepTree:
       head = self.dep2head[dep]
       span_min = min(dep, head)
       span_max = max(dep, head)
-      for mid_dep in xrange(span_min+1, span_max):
+      for mid_dep in range(span_min+1, span_max):
         mid_head = self.dep2head[mid_dep]
         if mid_head < span_min or mid_head > span_max:
           crossing = True

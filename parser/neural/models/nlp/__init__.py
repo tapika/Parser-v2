@@ -1,2 +1,2 @@
-from parsers import *
-from taggers import *
+from .parsers import *
+from .taggers import *

@@ -15,9 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import os
 import re
@@ -78,9 +78,9 @@ class IndexVocab(Configurable):
 
   #=============================================================
   def __getitem__(self, key):
-    if isinstance(key, basestring):
+    if isinstance(key, str):
       return int(key)
-    elif isinstance(key, (int, long, np.int32, np.int64)):
+    elif isinstance(key, (int, np.int32, np.int64)):
       return str(key)
     elif hasattr(key, '__iter__'):
       return [self[k] for k in key]

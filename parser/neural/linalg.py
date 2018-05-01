@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
  
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import numpy as np
 import tensorflow as tf
@@ -20,7 +20,7 @@ def orthonormal_initializer(input_size, output_size):
     success = False
     while not success:
       Q = np.random.randn(input_size, output_size) / np.sqrt(output_size)
-      for i in xrange(100):
+      for i in range(100):
         QTQmI = Q.T.dot(Q) - I
         loss = np.sum(QTQmI**2 / 2)
         Q2 = Q**2
@@ -51,7 +51,7 @@ def linear(inputs, output_size, n_splits=1, add_bias=True, initializer=None, mov
   output_size *= n_splits
   output_shape = []
   shape = tf.shape(all_inputs)
-  for i in xrange(n_dims-1):
+  for i in range(n_dims-1):
     output_shape.append(shape[i])
   output_shape.append(output_size)
   output_shape = tf.stack(output_shape)
@@ -108,7 +108,7 @@ def bilinear(inputs1, inputs2, output_size, n_splits=1, add_bias1=True, add_bias
   output_size *= n_splits
   output_shape = []
   shape1 = tf.shape(all_inputs1)
-  for i in xrange(n_dims1-1):
+  for i in range(n_dims1-1):
     output_shape.append(shape1[i])
   output_shape.append(output_size)
   output_shape.append(inputs2_bucket_size)
@@ -166,7 +166,7 @@ def convolutional(inputs, window_size, output_size, n_splits=1, add_bias=True, i
   output_size *= n_splits
   output_shape = []
   shape = tf.shape(all_inputs)
-  for i in xrange(n_dims-1):
+  for i in range(n_dims-1):
     output_shape.append(shape[i])
   output_shape.append(output_size)
   output_shape = tf.stack(output_shape)

@@ -15,12 +15,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import os
-import cPickle as pkl
+import pickle as pkl
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -117,7 +117,7 @@ class Zipf(Configurable):
         sess.run(tf.global_variables_initializer())
         if verbose:
           print('Fitting multi-zipfian distribution')
-        for i in xrange(self.max_train_iters):
+        for i in range(self.max_train_iters):
           idxs = np.exp(np.random.uniform(-1, np.log(len(self.counts)), size=batch_size)).astype(np.int64)
           feed_dict = {x:self.ranks[idxs], y:self.freqs[idxs]}
           loss, _ = sess.run([ell, minimize], feed_dict=feed_dict)
