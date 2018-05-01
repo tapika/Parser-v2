@@ -95,7 +95,6 @@ class Zipf(Configurable):
     
     with open(os.path.join(self.save_dir, '%s.pkl' % self.name.lower()),"rb") as f:
       params = pkl.load(f,encoding="bytes")
-      print(params)
     self.params['a'] = params[0]
     self.params['b'] = params[1]
     self.params['s'] = params[2]
