@@ -85,7 +85,7 @@ class Zipf(Configurable):
     s = self.params['s']
     t = self.params['t']
     params = np.stack([a, b, s, t])
-    with open(os.path.join(self.save_dir, '%s.pkl' % self.name.lower()), 'w') as f:
+    with open(os.path.join(self.save_dir, '%s.pkl' % self.name.lower()), 'wb') as f:
       pkl.dump(params, f)
     return
   
@@ -93,8 +93,9 @@ class Zipf(Configurable):
   def load(self):
     """"""
     
-    with open(os.path.join(self.save_dir, '%s.pkl' % self.name.lower())) as f:
-      params = pkl.load(f)
+    with open(os.path.join(self.save_dir, '%s.pkl' % self.name.lower()),"rb") as f:
+      params = pkl.load(f,encoding="bytes")
+      print(params)
     self.params['a'] = params[0]
     self.params['b'] = params[1]
     self.params['s'] = params[2]

@@ -55,10 +55,10 @@ class Dataset(Configurable):
       splits = bucketer.compute_splits(len(sent) for sent in self.iterfiles())
       for i in range(len(splits)):
         splits[i] += 1
-    for multibucket, vocab in self.items():
+    for multibucket, vocab in self.iteritems():
       multibucket.open(splits, depth=vocab.depth)
     for sent in self.iterfiles():
-      for multibucket, vocab in self.items():
+      for multibucket, vocab in self.iteritems():
         tokens = [line[vocab.conll_idx] for line in sent]
         idxs = [vocab.ROOT] + [vocab.index(token) for token in tokens]
         multibucket.add(idxs, tokens)
@@ -120,7 +120,7 @@ class Dataset(Configurable):
     for bkt_idx, batch in batches:
       feed_dict = {}
       tokens = []
-      for multibucket, vocab in self.items():
+      for multibucket, vocab in self.iteritems():
         bucket = multibucket[bkt_idx]
         indices = bucket.indices[batch]
         vocab.set_feed_dict(indices, feed_dict)
