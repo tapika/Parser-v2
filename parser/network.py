@@ -317,9 +317,9 @@ class Network(Configurable):
         
 
         
-
+        start_time = time.time()
         for input_file in input_files:
-          start_time = time.time()
+
           #print("Parseset vocab")
           self.add_file_vocabs([input_file])
 
@@ -354,9 +354,9 @@ class Network(Configurable):
       del trainset
       if self.verbose:
         try:
-          print(ctext('Parsing {0} file(s) took {1} seconds'.format(len(input_files), time.time()-start_time), 'bright_green'),file=sys.stderr,file=sys.stderr)
+          print(ctext('Parsing {0} file(s) took {1} seconds'.format(len(input_files), time.time()-start_time), 'bright_green'),file=sys.stderr)
         except:
-          print(ctext('Parsing took {} seconds'.format(time.time()-start_time), 'bright_green'),file=sys.stderr,file=sys.stderr)
+          print(ctext('Parsing took {} seconds'.format(time.time()-start_time), 'bright_green'),file=sys.stderr)
     return
   
   #=============================================================
