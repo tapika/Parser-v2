@@ -19,6 +19,7 @@
 
 
 
+import sys
 import re
 import codecs
 import numpy as np
