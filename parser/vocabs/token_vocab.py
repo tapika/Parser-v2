@@ -81,19 +81,29 @@ class TokenVocab(BaseVocab):
       conll_files = self.train_files
     
     for conll_file in conll_files:
-      with codecs.open(conll_file, encoding='utf-8', errors='ignore') as f:
-        for line_num, line in enumerate(f):
-          try:
-            line = line.strip()
-            if line and not line.startswith('#'):
-              line = line.split('\t')
-              assert len(line) == 10
-              token = line[self.conll_idx]
-              if not self.cased:
-                token = token.lower()
-              self.counts[token] += 1
-          except:
-            raise ValueError('File %s is misformatted at line %d' % (conll_file, line_num+1))
+      if isinstance(conll_file,str):
+        f=codecs.open(conll_file, encoding='utf-8', errors='ignore')
+      else:
+        f=conll_file
+
+      for line_num, line in enumerate(f):
+        try:
+          line = line.strip()
+          if line and not line.startswith('#'):
+            line = line.split('\t')
+            assert len(line) == 10
+            token = line[self.conll_idx]
+            if not self.cased:
+              token = token.lower()
+            self.counts[token] += 1
+        except:
+          raise ValueError('File %s is misformatted at line %d' % (conll_file, line_num+1))
+
+      if isinstance(conll_file,str):
+        f.close()
+      else:
+        f.seek(0)
+
     return
   
   #=============================================================

@@ -127,33 +127,43 @@ class BaseXTagger(NN):
 
   #=============================================================
   def write_probs(self, sents, output_file, probs, inv_idxs, metadata):
-    """"""
+    """
+    `output_file` can be a string or an open file (latter will be flushed but not closed)
+    """
     
     # Turns list of tuples of tensors into list of matrices
     tag_probs = [tag_prob for batch in probs for tag_prob in batch[0]]
     xtag_probs = [xtag_prob for batch in probs for xtag_prob in batch[1]]
     tokens_to_keep = [weight for batch in probs for weight in batch[2]]
     tokens = [sent for batch in sents for sent in batch]
-    
-    with codecs.open(output_file, 'w', encoding='utf-8', errors='ignore') as f:
-      for meta_idx,i in enumerate(inv_idxs):
-        sent, tag_prob, xtag_prob, weights = tokens[i], tag_probs[i], xtag_probs[i], tokens_to_keep[i]
-        sent = list(zip(*sent))
-        tag_preds = np.argmax(tag_prob, axis=1)
-        xtag_preds = np.argmax(xtag_prob, axis=1)
-        sent_meta=metadata[meta_idx]
-        if sent_meta["comments"]:
-          f.write("\n".join(sent_meta["comments"]))
-          f.write("\n")
-        for tok_idx,(token, tag_pred, xtag_pred, weight) in enumerate(zip(sent, tag_preds[1:], xtag_preds[1:], weights[1:])):
-          token = list(token)
-          token.insert(5, sent_meta["feats"][tok_idx])
-          token.append('_')
-          token.append(sent_meta["miscfield"][tok_idx])
-          token[3] = self.vocabs['tags'][tag_pred]
-          token[4] = self.vocabs['xtags'][xtag_pred]
-          f.write('\t'.join(token)+'\n')
-        f.write('\n')
+
+    close_out=False
+    if isinstance(output_file,str):
+      f=codecs.open(output_file, 'w', encoding='utf-8', errors='ignore')
+      close_out=True
+    else:
+      f=output_file
+    for meta_idx,i in enumerate(inv_idxs):
+      sent, tag_prob, xtag_prob, weights = tokens[i], tag_probs[i], xtag_probs[i], tokens_to_keep[i]
+      sent = list(zip(*sent))
+      tag_preds = np.argmax(tag_prob, axis=1)
+      xtag_preds = np.argmax(xtag_prob, axis=1)
+      sent_meta=metadata[meta_idx]
+      if sent_meta["comments"]:
+        f.write("\n".join(sent_meta["comments"]))
+        f.write("\n")
+      for tok_idx,(token, tag_pred, xtag_pred, weight) in enumerate(zip(sent, tag_preds[1:], xtag_preds[1:], weights[1:])):
+        token = list(token)
+        token.insert(5, sent_meta["feats"][tok_idx])
+        token.append('_')
+        token.append(sent_meta["miscfield"][tok_idx])
+        token[3] = self.vocabs['tags'][tag_pred]
+        token[4] = self.vocabs['xtags'][xtag_pred]
+        f.write('\t'.join(token)+'\n')
+      f.write('\n')
+    f.flush()
+    if close_out:
+      f.close()
     return
   
   #=============================================================

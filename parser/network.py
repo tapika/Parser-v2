@@ -18,7 +18,7 @@
 
 
 
-
+import sys
 import gc
 import os
 import time
@@ -35,6 +35,12 @@ from parser.vocabs import *
 from parser.dataset import *
 from parser.misc.colors import ctext
 from parser.neural.optimizers import RadamOptimizer
+
+import types
+
+
+import io
+import select
 
 #***************************************************************
 class Network(Configurable):
@@ -227,52 +233,115 @@ class Network(Configurable):
     return
   
   #=============================================================
+
+  @classmethod
+  def nonblocking_batches(cls,f=sys.stdin,timeout=0.2,batch_lines=1000):
+    """Yields batches of the input (as string), always ending with an empty line.
+       Batch is formed when at least batch_lines are read, or when no input is seen in timeour seconds
+       Stops yielding when f is closed"""
+    line_buffer=[]
+    while True:
+        ready_to_read=select.select([f], [], [], timeout)[0] #check whether f is ready to be read, wait at least timeout (otherwise we run a crazy fast loop)
+        if not ready_to_read:
+            # Stdin is not ready, yield what we've got, if anything
+            if line_buffer:
+                yield "".join(line_buffer)
+                line_buffer=[]
+            continue #next try
+        
+        # f is ready to read!
+        # Since we are reading conll, we should always get stuff until the next empty line, even if it means blocking read
+        while True:
+            line=f.readline()
+            if not line: #End of file detected --- I guess :D
+                if line_buffer:
+                    yield "".join(line_buffer)
+                    return
+            line_buffer.append(line)
+            if not line.strip(): #empty line
+                break
+
+        # Now we got the next sentence --- do we have enough to yield?
+        if len(line_buffer)>batch_lines:
+            yield "".join(line_buffer) #got plenty
+            line_buffer=[]
+
+
+  def batch_parse(self,input_files, output_dir=None, output_file=None):
+    """
+    
+    """
+    if len(input_files)==1 and not isinstance(input_files[0],str): #Parsing from stdin, batching input
+      inp=input_files[0]
+      self.parse((io.StringIO(batch) for batch in self.nonblocking_batches(f=inp)),None,sys.stdout)
+      # for batch in self.nonblocking_batches(f=inp):
+      #   #batch is a string (piece of the input) let's make it into more pallatable form
+      #   pseudofile=io.StringIO(batch)
+      #   self.parse([pseudofile],None,sys.stdout)
+    else:
+      self.parse(input_files, output_dir, output_file) #Normal operation as before
+
+  
   def parse(self, input_files, output_dir=None, output_file=None):
     """"""
-    
-    if not isinstance(input_files, (tuple, list)):
-      input_files = [input_files]
-    if len(input_files) > 1 and output_file is not None:
-      raise ValueError('Cannot provide a value for --output_file when parsing multiple files')
-    self.add_file_vocabs(input_files)
-    
-    start_time = time.time()
-    for input_file in input_files:
-      with tf.Graph().as_default():
-        config_proto = tf.ConfigProto()
-        if self.per_process_gpu_memory_fraction == -1:
-          config_proto.gpu_options.allow_growth = True
-        else:
-          config_proto.gpu_options.per_process_gpu_memory_fraction = self.per_process_gpu_memory_fraction
-        with tf.Session(config=config_proto) as sess:
-          # load the model and prep the parse set
-          self.setup_vocabs()
-          trainset = Trainset.from_configurable(self, self.vocabs, nlp_model=self.nlp_model)
-          with tf.variable_scope(self.name.title()):
-            train_tensors = trainset()
-          train_outputs = [train_tensors[train_key] for train_key in trainset.train_keys]
 
-          saver = tf.train.Saver(self.save_vars, max_to_keep=1)
-          for var in self.non_save_vars:
-            sess.run(var.initializer)
-          saver.restore(sess, tf.train.latest_checkpoint(self.save_dir))
-          
-          # Iterate through files and batches
+    if isinstance(input_files, types.GeneratorType):
+      pass
+    else:
+      if not isinstance(input_files, (tuple, list)):
+        input_files = [input_files]
+      if len(input_files) > 1 and output_file is not None:
+        raise ValueError('Cannot provide a value for --output_file when parsing multiple files')
+      
+    with tf.Graph().as_default():
+      config_proto = tf.ConfigProto()
+      if self.per_process_gpu_memory_fraction == -1:
+        config_proto.gpu_options.allow_growth = True
+      else:
+        config_proto.gpu_options.per_process_gpu_memory_fraction = self.per_process_gpu_memory_fraction
+      with tf.Session(config=config_proto) as sess:
+        # load the model and prep the parse set
+
+        self.add_file_vocabs(["/usr/share/ParseBank/TinyFinnish-Stanford-model/data/fi-ud-train.conllu"])
+        self.setup_vocabs()
+        trainset = Trainset.from_configurable(self, self.vocabs, nlp_model=self.nlp_model)
+        with tf.variable_scope(self.name.title()):
+          train_tensors = trainset()
+        train_outputs = [train_tensors[train_key] for train_key in trainset.train_keys]
+
+        saver = tf.train.Saver(self.save_vars, max_to_keep=1)
+        for var in self.non_save_vars:
+          sess.run(var.initializer)
+        saver.restore(sess, tf.train.latest_checkpoint(self.save_dir))
+        
+
+        
+        start_time = time.time()
+        for input_file in input_files:
+          #print("Parseset vocab")
+          self.add_file_vocabs([input_file])
+
+          #print("Beg Parseset.from_configurable")
           parseset = Parseset.from_configurable(self, self.vocabs, parse_files=input_file, nlp_model=self.nlp_model)
+          #print("Done Parseset.from_configurable")
           with tf.variable_scope(self.name.title(), reuse=True):
             parse_tensors = parseset(moving_params=self.optimizer)
           parse_outputs = [parse_tensors[parse_key] for parse_key in parseset.parse_keys]
-          
-          input_dir, input_file = os.path.split(input_file)
-          if output_dir is None and output_file is None:
-            output_dir = self.save_dir
-          if output_dir == input_dir and output_file is None:
-            output_path = os.path.join(input_dir, 'parsed-'+input_file)
-          elif output_file is None:
-            output_path = os.path.join(output_dir, input_file)
+
+          if not isinstance(input_file,io.StringIO):
+            input_dir, input_file = os.path.split(input_file)
+            if output_dir is None and output_file is None:
+              output_dir = self.save_dir
+            if output_dir == input_dir and output_file is None:
+              output_path = os.path.join(input_dir, 'parsed-'+input_file)
+            elif output_file is None:
+              output_path = os.path.join(output_dir, input_file)
+            else:
+              output_path = output_file
           else:
-            output_path = output_file
-          
+            assert output_file is not None
+            output_path=output_file #The expectation is for this to be an open file
+
           probs = []
           sents = []
           for feed_dict, tokens in parseset.iterbatches(shuffle=False):
@@ -281,9 +350,8 @@ class Network(Configurable):
           parseset.write_probs(sents, output_path, probs, parseset._metadata)
       del trainset
       del parseset
-      print('Finished one')
-    if self.verbose:
-      print(ctext('Parsing {0} file(s) took {1} seconds'.format(len(input_files), time.time()-start_time), 'bright_green'))
+      if self.verbose:
+        print(ctext('Parsing {0} file(s) took {1} seconds'.format(len(input_files), time.time()-start_time), 'bright_green'),file=sys.stderr)
     return
   
   #=============================================================

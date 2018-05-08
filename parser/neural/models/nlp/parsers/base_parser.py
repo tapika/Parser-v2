@@ -140,34 +140,42 @@ class BaseParser(NN):
     rel_probs = [rel_prob for batch in probs for rel_prob in batch[1]]
     tokens_to_keep = [weight for batch in probs for weight in batch[2]]
     tokens = [sent for batch in sents for sent in batch]
-    
-    with codecs.open(output_file, 'w', encoding='utf-8', errors='ignore') as f:
-      j = 0
-      for meta_idx,i in enumerate(inv_idxs):
-        sent, arc_prob, rel_prob, weights = tokens[i], arc_probs[i], rel_probs[i], tokens_to_keep[i]
-        sent = list(zip(*sent))
-        sequence_length = int(np.sum(weights))+1
-        arc_prob = arc_prob[:sequence_length][:,:sequence_length]
-        #arc_preds = np.argmax(arc_prob, axis=1)
-        arc_preds = nonprojective(arc_prob)
-        arc_preds_one_hot = np.zeros([rel_prob.shape[0], rel_prob.shape[2]])
-        arc_preds_one_hot[np.arange(len(arc_preds)), arc_preds] = 1.
-        rel_preds = np.argmax(np.einsum('nrb,nb->nr', rel_prob, arc_preds_one_hot), axis=1)
-        sent_meta=metadata[meta_idx]
-        if sent_meta["comments"]:
-          f.write("\n".join(sent_meta["comments"]))
-          f.write("\n")
-        for tok_idx,(token, arc_pred, rel_pred, weight) in enumerate(zip(sent, arc_preds[1:], rel_preds[1:], weights[1:])):
-          token = list(token)
-          token.insert(5, sent_meta["feats"][tok_idx])
-          token.append('_')
-          token.append(sent_meta["miscfield"][tok_idx])
-          token[6] = self.vocabs['heads'][arc_pred]
-          token[7] = self.vocabs['rels'][rel_pred]
-          f.write('\t'.join(token)+'\n')
-        j += 1
-        if j < len(inv_idxs):
-          f.write('\n')
+
+    if isinstance(output_file,str):
+      f=codecs.open(output_file, 'w', encoding='utf-8', errors='ignore')
+      close_out=True
+    else:
+      f=output_file
+
+    j = 0
+    for meta_idx,i in enumerate(inv_idxs):
+      sent, arc_prob, rel_prob, weights = tokens[i], arc_probs[i], rel_probs[i], tokens_to_keep[i]
+      sent = list(zip(*sent))
+      sequence_length = int(np.sum(weights))+1
+      arc_prob = arc_prob[:sequence_length][:,:sequence_length]
+      #arc_preds = np.argmax(arc_prob, axis=1)
+      arc_preds = nonprojective(arc_prob)
+      arc_preds_one_hot = np.zeros([rel_prob.shape[0], rel_prob.shape[2]])
+      arc_preds_one_hot[np.arange(len(arc_preds)), arc_preds] = 1.
+      rel_preds = np.argmax(np.einsum('nrb,nb->nr', rel_prob, arc_preds_one_hot), axis=1)
+      sent_meta=metadata[meta_idx]
+      if sent_meta["comments"]:
+        f.write("\n".join(sent_meta["comments"]))
+        f.write("\n")
+      for tok_idx,(token, arc_pred, rel_pred, weight) in enumerate(zip(sent, arc_preds[1:], rel_preds[1:], weights[1:])):
+        token = list(token)
+        token.insert(5, sent_meta["feats"][tok_idx])
+        token.append('_')
+        token.append(sent_meta["miscfield"][tok_idx])
+        token[6] = self.vocabs['heads'][arc_pred]
+        token[7] = self.vocabs['rels'][rel_pred]
+        f.write('\t'.join(token)+'\n')
+      j += 1
+      if j < len(inv_idxs):
+        f.write('\n')
+    if isinstance(output_file,str):
+      output_file.close()
+        
     return
   
   #=============================================================

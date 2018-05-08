@@ -18,7 +18,7 @@
 
 
 
-
+import io
 import re
 import codecs
 from collections import Counter
@@ -41,6 +41,10 @@ class Dataset(Configurable):
     """"""
     
     nlp_model = kwargs.pop('nlp_model', None)
+    if "parse_files" in kwargs and isinstance(kwargs["parse_files"],io.StringIO): ### SPECIAL CASE - PARSING StringIO
+      self.preopen_parse_file=kwargs.pop("parse_files") #This doesn't really play well with the configparser thing
+    else:
+      self.preopen_parse_file=None
     super(Dataset, self).__init__(*args, **kwargs)
     
     self._vocabs = vocabs
@@ -67,6 +71,7 @@ class Dataset(Configurable):
     for multibucket in self:
       multibucket.close()
     self._multibucket = Multibucket.from_dataset(self)
+    
     return
   
   #=============================================================
@@ -80,26 +85,39 @@ class Dataset(Configurable):
     """"""
     #0 1    2     3     4     5     6    7     8     9
     ID,FORM,LEMMA,UPOS,XPOS,FEATS,HEAD,DEPREL,DEPS,MISC=range(10)
-    for data_file in self.data_files:
-      with codecs.open(data_file, encoding='utf-8', errors='ignore') as f:
-        buff = []
-        metadata = {"comments":[],"miscfield":[],"feats":[]}
-        for line in f:
-          line = line.strip()
-          if line:
-            if not line.startswith('#'):
-              if not re.match('[0-9]+[-.][0-9]+', line):
-                cols=line.split("\t")
-                metadata["miscfield"].append(cols[MISC])
-                metadata["feats"].append(cols[FEATS])
-                buff.append(cols)
-            else:
-              metadata["comments"].append(line)
-          elif buff:
-            yield buff, metadata
-            buff = []
-            metadata = {"comments":[],"miscfield":[],"feats":[]}
-        yield buff, metadata
+    if isinstance(self.preopen_parse_file,io.StringIO): #Go from here
+      data_files=[self.preopen_parse_file]
+    else:
+      data_files=self.data_files
+    for data_file in data_files:
+      if isinstance(data_file,str):
+        f=codecs.open(data_file, encoding='utf-8', errors='ignore')
+      else:
+        f=data_file
+        
+      buff = []
+      metadata = {"comments":[],"miscfield":[],"feats":[]}
+      for line in f:
+        line = line.strip()
+        if line:
+          if not line.startswith('#'):
+            if not re.match('[0-9]+[-.][0-9]+', line):
+              cols=line.split("\t")
+              metadata["miscfield"].append(cols[MISC])
+              metadata["feats"].append(cols[FEATS])
+              buff.append(cols)
+          else:
+            metadata["comments"].append(line)
+        elif buff:
+          yield buff, metadata
+          buff = []
+          metadata = {"comments":[],"miscfield":[],"feats":[]}
+      yield buff, metadata
+
+      if isinstance(data_file,str):
+        f.close()
+      else:
+        f.seek(0) #rewind for new reading
   
   #=============================================================
   def iterbatches(self, shuffle=True, return_check=False):
