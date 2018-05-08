@@ -235,7 +235,7 @@ class Network(Configurable):
   #=============================================================
 
   @classmethod
-  def nonblocking_batches(cls,f=sys.stdin,timeout=0.2,batch_lines=1000):
+  def nonblocking_batches(cls,f=sys.stdin,timeout=0.2,batch_lines=10000):
     """Yields batches of the input (as string), always ending with an empty line.
        Batch is formed when at least batch_lines are read, or when no input is seen in timeour seconds
        Stops yielding when f is closed"""
@@ -316,8 +316,9 @@ class Network(Configurable):
         
 
         
-        start_time = time.time()
+
         for input_file in input_files:
+          start_time = time.time()
           #print("Parseset vocab")
           self.add_file_vocabs([input_file])
 
@@ -348,10 +349,13 @@ class Network(Configurable):
             probs.append(sess.run(parse_outputs, feed_dict=feed_dict))
             sents.append(tokens)
           parseset.write_probs(sents, output_path, probs, parseset._metadata)
+          del parseset
       del trainset
-      del parseset
       if self.verbose:
-        print(ctext('Parsing {0} file(s) took {1} seconds'.format(len(input_files), time.time()-start_time), 'bright_green'),file=sys.stderr)
+        try:
+          print(ctext('Parsing {0} file(s) took {1} seconds'.format(len(input_files), time.time()-start_time), 'bright_green'),file=sys.stderr)
+        except:
+          print(ctext('Parsing took {} seconds'.format(time.time()-start_time), 'bright_green'),file=sys.stderr)
     return
   
   #=============================================================
