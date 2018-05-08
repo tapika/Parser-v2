@@ -101,7 +101,7 @@ def chu_liu_edmonds(probs):
   edges = np.argmax(probs, axis=1)
   cycles = find_cycles(edges)
   if cycles:
-    print("found cycle, fixing...")
+    print("found cycle, fixing...",file=sys.stderr)
     # (c)
     cycle_vertices = cycles.pop()
     # (nc)
@@ -208,7 +208,7 @@ if __name__ == '__main__':
         best_edges = edges_
         best_score = score
   edges = best_edges
-  print(edges)
-  print(np.arange(len(edges)))
-  print(find_cycles(edges))
-  print(find_roots(edges))
+  print(edges,file=sys.stderr)
+  print(np.arange(len(edges)),file=sys.stderr)
+  print(find_cycles(edges),file=sys.stderr)
+  print(find_roots(edges),file=sys.stderr)

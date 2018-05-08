@@ -407,4 +407,4 @@ if __name__ == '__main__':
   """"""
   
   config = Configurable()
-  print('Configurable passes')
+  print('Configurable passes',file=sys.stderr)

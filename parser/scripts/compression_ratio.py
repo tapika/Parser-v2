@@ -65,4 +65,4 @@ if __name__ == '__main__':
     trials.append(os.path.getsize('compressed.txt.xz')/os.path.getsize('uncompressed.txt'))
   os.remove('uncompressed.txt')
   os.remove('compressed.txt.xz')
-  print(np.mean(trials))
+  print(np.mean(trials),file=sys.stderr)

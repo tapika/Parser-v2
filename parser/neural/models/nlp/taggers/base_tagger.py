@@ -103,7 +103,7 @@ class BaseTagger(NN):
     strings.append(color_pattern('SS:', '{SS:5.2f}%', 'bright_green'))
     strings.append(color_pattern('Speed:', '{Seq_rate:6.1f} seqs/sec', 'bright_magenta'))
     string = ctext('{0}  ', 'bold') + ' | '.join(strings)
-    print(string.format(prefix, **acc_dict))
+    print(string.format(prefix, **acc_dict),file=sys.stderr)
     return
   
   #=============================================================

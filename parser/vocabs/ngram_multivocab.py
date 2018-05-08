@@ -124,8 +124,8 @@ if __name__ == '__main__':
   ngram_multivocab = NgramMultivocab.from_vocab(token_vocab)
   ngram_multivocab.add_files(configurable.valid_files)
   ngram_multivocab.index_tokens()
-  print("Indices for '<PAD>': %s" % str(ngram_multivocab.index('<PAD>')))
-  print("Indices for 'the': %s" % str(ngram_multivocab.index('the')))
-  print("Indices for 'The': %s" % str(ngram_multivocab.index('The')))
-  print('NgramMultivocab passes')
+  print("Indices for '<PAD>': %s" % str(ngram_multivocab.index('<PAD>')),file=sys.stderr)
+  print("Indices for 'the': %s" % str(ngram_multivocab.index('the')),file=sys.stderr)
+  print("Indices for 'The': %s" % str(ngram_multivocab.index('The')),file=sys.stderr)
+  print('NgramMultivocab passes',file=sys.stderr)
   

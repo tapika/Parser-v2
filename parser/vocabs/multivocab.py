@@ -163,8 +163,8 @@ if __name__ == '__main__':
   multivocab = Multivocab.from_configurable(configurable, [pretrained_vocab, token_vocab, subtoken_vocab])
   multivocab.add_files(configurable.valid_files)
   multivocab.index_tokens()
-  print("Indices for '<PAD>': %s" % str(multivocab.index('<PAD>')))
-  print("Indices for 'the': %s" % str(multivocab.index('the')))
-  print("Indices for 'The': %s" % str(multivocab.index('The')))
-  print('Multivocab passes')
+  print("Indices for '<PAD>': %s" % str(multivocab.index('<PAD>')),file=sys.stderr)
+  print("Indices for 'the': %s" % str(multivocab.index('the')),file=sys.stderr)
+  print("Indices for 'The': %s" % str(multivocab.index('The')),file=sys.stderr)
+  print('Multivocab passes',file=sys.stderr)
   

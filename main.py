@@ -58,7 +58,7 @@ def train(save_dir, **kwargs):
       if os.path.isfile(os.path.join(save_dir, 'config.cfg')):
         os.remove(os.path.join(save_dir, 'config.cfg'))
   except KeyboardInterrupt:
-    print()
+    print(file=sys.stderr)
     sys.exit(0)
   network = Network(**kwargs)
   network.train(load=load)

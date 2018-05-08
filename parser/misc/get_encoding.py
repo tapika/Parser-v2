@@ -37,7 +37,7 @@ def get_encoding(filename):
         success = True
         break
       except ValueError as e:
-        print('Encoding {0} failed for file {1} at line {2}: {3}\n{4}'.format(encoding, filename, i, line, e))
+        print('Encoding {0} failed for file {1} at line {2}: {3}\n{4}'.format(encoding, filename, i, line, e),file=sys.stderr)
         continue
 
   if success:

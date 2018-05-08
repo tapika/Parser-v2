@@ -14,7 +14,7 @@ def orthonormal_initializer(input_size, output_size):
   """"""
   
   if not tf.get_variable_scope().reuse:
-    print(tf.get_variable_scope().name)
+    print(tf.get_variable_scope().name,file=sys.stderr)
     I = np.eye(output_size)
     lr = .1
     eps = .05/(output_size + input_size)
@@ -32,7 +32,7 @@ def orthonormal_initializer(input_size, output_size):
       if np.isfinite(loss) and np.max(Q) < 1e6:
         success = True
       eps *= 2
-    print('Orthogonal pretrainer loss: %.2e' % loss)
+    print('Orthogonal pretrainer loss: %.2e' % loss,file=sys.stderr)
   else:
     Q = np.random.randn(input_size, output_size) / np.sqrt(output_size)
   return Q.astype(np.float32)

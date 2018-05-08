@@ -106,4 +106,4 @@ if __name__ == '__main__':
   pretrained_vocab = PretrainedVocab.from_configurable(configurable)
   retrained_vocab = RetrainedVocab.from_vocab(pretrained_vocab)
   retrain_loss = retrained_vocab(pretrained_vocab)
-  print('RetrainedVocab passes')
+  print('RetrainedVocab passes',file=sys.stderr)

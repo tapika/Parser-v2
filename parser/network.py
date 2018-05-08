@@ -188,7 +188,7 @@ class Network(Configurable):
             train_time = 0
             if current_acc > best_acc:
               if verbose:
-                print(ctext('Saving model...', 'bright_yellow'))
+                print(ctext('Saving model...', 'bright_yellow'),file=sys.stderr)
               best_acc = current_acc
               n_iters_since_improvement = 0
               saver.save(sess, os.path.join(self.save_dir, self.name.lower()),
@@ -230,7 +230,7 @@ class Network(Configurable):
           sents.append(tokens)
         parseset.write_probs(sents, os.path.join(output_dir, output_file), probs)
     if self.verbose:
-      print(ctext('Parsing {0} file(s) took {1} seconds'.format(len(input_files), time.time()-start_time), 'bright_green'))
+      print(ctext('Parsing {0} file(s) took {1} seconds'.format(len(input_files), time.time()-start_time), 'bright_green'),file=sys.stderr)
     return
   
   #=============================================================
@@ -354,9 +354,9 @@ class Network(Configurable):
       del trainset
       if self.verbose:
         try:
-          print(ctext('Parsing {0} file(s) took {1} seconds'.format(len(input_files), time.time()-start_time), 'bright_green'),file=sys.stderr)
+          print(ctext('Parsing {0} file(s) took {1} seconds'.format(len(input_files), time.time()-start_time), 'bright_green'),file=sys.stderr,file=sys.stderr)
         except:
-          print(ctext('Parsing took {} seconds'.format(time.time()-start_time), 'bright_green'),file=sys.stderr)
+          print(ctext('Parsing took {} seconds'.format(time.time()-start_time), 'bright_green'),file=sys.stderr,file=sys.stderr)
     return
   
   #=============================================================

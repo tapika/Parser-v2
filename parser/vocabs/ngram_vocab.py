@@ -138,4 +138,4 @@ if __name__ == '__main__':
   ngram_vocab.token_vocab.count(conll_files = configurable.valid_files)
   ngram_vocab.index_tokens()
   ngram_vocab.fit_to_zipf()
-  print('NgramVocab passes')
+  print('NgramVocab passes',file=sys.stderr)

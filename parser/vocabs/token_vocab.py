@@ -189,4 +189,4 @@ if __name__ == '__main__':
   token_vocab.fit_to_zipf()
   #pretrained_vocab = PretrainedVocab.from_vocab(token_vocab)
   #assert min(pretrained_vocab.counts.values()) == 1
-  print('TokenVocab passed')
+  print('TokenVocab passed',file=sys.stderr)

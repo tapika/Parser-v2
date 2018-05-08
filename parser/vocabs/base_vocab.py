@@ -213,4 +213,4 @@ if __name__ == '__main__':
   """"""
   
   base_vocab = BaseVocab()
-  print('BaseVocab passes')
+  print('BaseVocab passes',file=sys.stderr)

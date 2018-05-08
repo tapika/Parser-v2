@@ -146,4 +146,4 @@ if __name__ == '__main__':
   """"""
   
   pretrained_vocab = PretrainedVocab(None)
-  print('PretrainedVocab passes')
+  print('PretrainedVocab passes',file=sys.stderr)

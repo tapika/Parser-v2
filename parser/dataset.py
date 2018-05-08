@@ -244,5 +244,5 @@ if __name__ == '__main__':
   rel_vocab = RelVocab.from_configurable(configurable)
   trainset = Trainset.from_configurable(configurable, [dep_vocab, word_multivocab, lemma_vocab, tag_vocab, xtag_vocab, head_vocab, rel_vocab])
   trainset()
-  print('Dataset passes')
+  print('Dataset passes',file=sys.stderr)
   

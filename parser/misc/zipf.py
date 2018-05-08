@@ -117,14 +117,14 @@ class Zipf(Configurable):
       with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
         if verbose:
-          print('Fitting multi-zipfian distribution')
+          print('Fitting multi-zipfian distribution',file=sys.stderr)
         for i in range(self.max_train_iters):
           idxs = np.exp(np.random.uniform(-1, np.log(len(self.counts)), size=batch_size)).astype(np.int64)
           feed_dict = {x:self.ranks[idxs], y:self.freqs[idxs]}
           loss, _ = sess.run([ell, minimize], feed_dict=feed_dict)
           losses.append(loss)
           if verbose and ((i+1) % print_every) == 0:
-            print('%5d) loss: %.2e' % (i+1, np.mean(losses)))
+            print('%5d) loss: %.2e' % (i+1, np.mean(losses)),file=sys.stderr)
             losses = []
         yhat = tf.exp(graph.get_tensor_by_name('yhat:0'))
         a = graph.get_tensor_by_name('a:0')

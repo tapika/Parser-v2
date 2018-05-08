@@ -234,4 +234,4 @@ if __name__ == '__main__':
   subtoken_vocab.token_vocab.count(configurable.valid_files)
   subtoken_vocab.index_tokens()
   subtoken_vocab.fit_to_zipf()
-  print('SubtokenVocab passes')
+  print('SubtokenVocab passes',file=sys.stderr)

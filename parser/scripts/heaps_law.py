@@ -65,7 +65,7 @@ if __name__ == '__main__':
   updates = d2ellinv.dot(dell)
   K -= updates[0]
   b -= updates[1]
-  print(b)
+  print(b,file=sys.stderr)
   #K_ = 5
   #b_ = .74
   #for i in xrange(20):
