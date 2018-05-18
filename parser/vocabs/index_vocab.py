@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright 2016 Timothy Dozat
 # 
@@ -33,20 +33,20 @@ __all__ = ['DepVocab', 'HeadVocab']
 
 #***************************************************************
 class IndexVocab(Configurable):
-  """"""
+  """ """
   
   ROOT = 0
   
   #=============================================================
   def __init__(self, *args, **kwargs):
-    """"""
+    """ """
     
     super(IndexVocab, self).__init__(*args, **kwargs)
     self.placeholder = None
   
   #=============================================================
   def generate_placeholder(self):
-    """"""
+    """ """
     
     if self.placeholder is None:
       self.placeholder = tf.placeholder(tf.int32, shape=[None, None], name=self.name)
@@ -54,7 +54,7 @@ class IndexVocab(Configurable):
   
   #=============================================================
   def set_feed_dict(self, data, feed_dict):
-    """"""
+    """ """
     
     feed_dict[self.placeholder] = data
     return

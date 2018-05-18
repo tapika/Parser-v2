@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
  
 # Copyright 2016 Timothy Dozat
 # 
@@ -28,14 +28,14 @@ from parser.configurable import Configurable
 
 #***************************************************************
 class NN(Configurable):
-  """"""
+  """ """
   
   ZERO = tf.convert_to_tensor(0.)
   ONE = tf.convert_to_tensor(1.)
   
   #=============================================================
   def __init__(self, *args, **kwargs):
-    """"""
+    """ """
     
     super(NN, self).__init__(*args, **kwargs)
     
@@ -49,7 +49,7 @@ class NN(Configurable):
   
   #=============================================================
   def embed_concat(self, vocabs, vocabs_to_merge=[['words', 'lemmas'], ['tags', 'xtags']]):
-    """"""
+    """ """
     
     merge_dict = {vocab.name:vocab.name for vocab in vocabs}
     for vocab1, vocab2 in vocabs_to_merge:
@@ -88,7 +88,7 @@ class NN(Configurable):
   
   #=============================================================
   def linear(self, inputs, output_size, keep_prob=None, n_splits=1, add_bias=True, initializer=tf.zeros_initializer()):
-    """"""
+    """ """
     
     if isinstance(inputs, (list, tuple)):
       n_dims = len(inputs[0].get_shape().as_list())
@@ -121,7 +121,7 @@ class NN(Configurable):
   
   #=============================================================
   def bilinear(self, inputs1, inputs2, output_size, keep_prob=None, n_splits=1, add_bias1=True, add_bias2=True, initializer=tf.zeros_initializer()):
-    """"""
+    """ """
     
     if isinstance(inputs1, (list, tuple)):
       n_dims1 = len(inputs1[0].get_shape().as_list())
@@ -167,7 +167,7 @@ class NN(Configurable):
 
   #=============================================================
   def convolutional(self, inputs, window_size, output_size, keep_prob=None, n_splits=1, add_bias=True, initializer=None):
-    """"""
+    """ """
     
     if isinstance(inputs, (list, tuple)):
       n_dims = len(inputs[0].get_shape().as_list())
@@ -201,7 +201,7 @@ class NN(Configurable):
   
   #=============================================================
   def MLP(self, inputs, output_size=None, keep_prob=None, n_splits=1, add_bias=True):
-    """"""
+    """ """
     
     if output_size is None:
       output_size = self.mlp_size
@@ -217,7 +217,7 @@ class NN(Configurable):
   
   #=============================================================
   def biMLP(self, inputs1, inputs2, output_size=None, keep_prob=None, n_splits=1, add_bias1=True, add_bias2=True):
-    """"""
+    """ """
     
     if output_size is None:
       output_size = self.mlp_size
@@ -233,7 +233,7 @@ class NN(Configurable):
   
   #=============================================================
   def CNN(self, inputs, window_size, output_size, keep_prob=None, n_splits=1, add_bias=True):
-    """"""
+    """ """
     
     if window_size is None:
       window_size = self.window_size
@@ -251,7 +251,7 @@ class NN(Configurable):
   
   #=============================================================
   def linear_attention(self, inputs):
-    """"""
+    """ """
     
     attn_logits = self.linear(inputs, 1, add_bias=False)
     # (n x b)
@@ -264,7 +264,7 @@ class NN(Configurable):
   
   #=============================================================
   def bilinear_attention(self, inputs):
-    """"""
+    """ """
     
     attn_logits = self.bilinear(inputs, inputs, 1, add_bias2=False, add_bias=False)
     # (n x b x b)
@@ -275,7 +275,7 @@ class NN(Configurable):
   
   #=============================================================
   def RNN(self, inputs, output_size):
-    """"""
+    """ """
     
     input_size = inputs.get_shape().as_list()[-1]
     cell = self.recur_cell.from_configurable(self, output_size, input_size=input_size, moving_params=self.moving_params)
@@ -294,7 +294,7 @@ class NN(Configurable):
   
   #=============================================================
   def __call__(self, inputs, targets, moving_params=None):
-    """"""
+    """ """
     
     raise NotImplementedError()
   

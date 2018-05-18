@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright 2016 Timothy Dozat
 # 
@@ -35,11 +35,11 @@ __all__ = ['WordVocab', 'LemmaVocab', 'TagVocab', 'XTagVocab', 'RelVocab']
 
 #***************************************************************
 class TokenVocab(BaseVocab):
-  """"""
+  """ """
   
   #=============================================================
   def __init__(self, *args, **kwargs):
-    """"""
+    """ """
     
     recount = kwargs.pop('recount', False)
     initialize_zero = kwargs.pop('initialize_zero', True)
@@ -64,7 +64,7 @@ class TokenVocab(BaseVocab):
   
   #=============================================================
   def setup(self):
-    """"""
+    """ """
     
     self.placeholder = None
     del self._embeddings
@@ -76,7 +76,7 @@ class TokenVocab(BaseVocab):
   
   #=============================================================
   def count(self, conll_files=None):
-    """"""
+    """ """
     
     if conll_files is None:
       conll_files = self.train_files
@@ -109,7 +109,7 @@ class TokenVocab(BaseVocab):
   
   #=============================================================
   def load(self):
-    """"""
+    """ """
     
     with codecs.open(self.filename, encoding='utf-8') as f:
       for line_num, line in enumerate(f):
@@ -125,7 +125,7 @@ class TokenVocab(BaseVocab):
   
   #=============================================================
   def dump(self):
-    """"""
+    """ """
     
     with codecs.open(self.filename, 'w', encoding='utf-8') as f:
       for word, count in self.sorted_counts(self.counts):
@@ -134,7 +134,7 @@ class TokenVocab(BaseVocab):
   
   #=============================================================
   def index_vocab(self):
-    """"""
+    """ """
     
     for token, count in self.sorted_counts(self.counts):
       if ((count >= self.min_occur_count) and
@@ -145,7 +145,7 @@ class TokenVocab(BaseVocab):
   
   #=============================================================
   def fit_to_zipf(self, plot=True):
-    """"""
+    """ """
     
     zipf = Zipf.from_configurable(self, self.counts, name='zipf-%s'%self.name)
     if plot:
@@ -176,7 +176,7 @@ class RelVocab(TokenVocab):
 
 #***************************************************************
 if __name__ == '__main__':
-  """"""
+  """ """
   
   from parser import Configurable
   from parser.vocabs import PretrainedVocab, TokenVocab, WordVocab

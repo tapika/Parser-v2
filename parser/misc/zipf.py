@@ -32,11 +32,11 @@ from parser.neural.optimizers import RadamOptimizer
 
 #***************************************************************
 class Zipf(Configurable):
-  """"""
+  """ """
   
   #=============================================================
   def __init__(self, counts, *args, **kwargs):
-    """"""
+    """ """
     
     super(Zipf, self).__init__(*args, **kwargs)
     
@@ -58,7 +58,7 @@ class Zipf(Configurable):
   
   #=============================================================
   def __call__(self):
-    """"""
+    """ """
     
     radam_optimizer = RadamOptimizer.from_configurable(self, learning_rate=1e-1, decay_steps=500)
     x = tf.placeholder(tf.float32, shape=(None,1), name='x')
@@ -79,7 +79,7 @@ class Zipf(Configurable):
     
   #=============================================================
   def dump(self):
-    """"""
+    """ """
     
     a = self.params['a']
     b = self.params['b']
@@ -92,7 +92,7 @@ class Zipf(Configurable):
   
   #=============================================================
   def load(self):
-    """"""
+    """ """
     
     with open(os.path.join(self.save_dir, '%s.pkl' % self.name.lower()),"rb") as f:
       params = pkl.load(f,encoding="bytes")
@@ -105,7 +105,7 @@ class Zipf(Configurable):
   
   #=============================================================
   def fit(self):
-    """"""
+    """ """
     
     batch_size = self.batch_size 
     print_every = self.print_every
@@ -140,7 +140,7 @@ class Zipf(Configurable):
   
   #=============================================================
   def plot(self):
-    """"""
+    """ """
     
     a, b = self.params['a'], self.params['b']
     s, t = self.params['s'], self.params['t']

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright 2016 Timothy Dozat
 # 
@@ -31,7 +31,7 @@ from collections import defaultdict
 
 #***************************************************************
 if __name__ == '__main__':
-  """"""
+  """ """
   
   parser = argparse.ArgumentParser()
   parser.add_argument('files', nargs='+')

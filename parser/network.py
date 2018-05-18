@@ -45,7 +45,7 @@ import select
 
 #***************************************************************
 class Network(Configurable):
-  """"""
+  """ """
   
   #=============================================================
   def __init__(self, *args, **kwargs):
@@ -95,7 +95,7 @@ class Network(Configurable):
   
   #=============================================================
   def setup_vocabs(self):
-    """"""
+    """ """
     
     for vocab in self.vocabs:
       vocab.setup()
@@ -103,7 +103,7 @@ class Network(Configurable):
   
   #=============================================================
   def train(self, load=False):
-    """"""
+    """ """
     
     # prep the configurables
     self.add_file_vocabs(self.parse_files)
@@ -236,7 +236,7 @@ class Network(Configurable):
   #=============================================================
 
   @classmethod
-  def nonblocking_batches(cls,f=sys.stdin,timeout=0.2,batch_lines=10000):
+  def nonblocking_batches(cls,f=sys.stdin,timeout=10,batch_lines=10000):
     """Yields batches of the input (as string), always ending with an empty line.
        Batch is formed when at least batch_lines are read, or when no input is seen in timeour seconds
        Stops yielding when f is closed"""
@@ -284,7 +284,7 @@ class Network(Configurable):
 
   
   def parse(self, input_files, output_dir=None, output_file=None):
-    """"""
+    """ """
 
     if isinstance(input_files, types.GeneratorType):
       pass
@@ -385,7 +385,7 @@ class Network(Configurable):
 
 #***************************************************************
 if __name__ == '__main__':
-  """"""
+  """ """
   
   from parser import Network
   configurable = Configurable()

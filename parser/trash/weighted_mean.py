@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright 2016 Timothy Dozat
 # 
@@ -26,11 +26,11 @@ from parser.neural.models import NN
 
 #***************************************************************
 class WeightedMean(NN):
-  """"""
+  """ """
   
   #=============================================================
   def __call__(self, vocab, output_size, moving_params=None):
-    """"""
+    """ """
     
     inputs = tf.placeholder(tf.int32, shape=(None,None), name='inputs-%s' % self.name)
     

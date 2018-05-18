@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
  
 # Copyright 2016 Timothy Dozat
 # 
@@ -34,11 +34,11 @@ from parser.misc.colors import ctext, color_pattern
 
 #***************************************************************
 class Bucketer(Configurable):
-  """"""
+  """ """
   
   #=============================================================
   def __init__(self, k, *args, **kwargs):
-    """"""
+    """ """
     
     super(Bucketer, self).__init__(*args, **kwargs)
     
@@ -48,7 +48,7 @@ class Bucketer(Configurable):
   
   #=============================================================
   def compute_splits(self, data, plot=True):
-    """"""
+    """ """
     
     len2cnt = Counter(data)
     
@@ -97,7 +97,7 @@ class Bucketer(Configurable):
   
   #=============================================================
   def reindex(self):
-    """"""
+    """ """
     
     idx = 0
     self._counts = [0 for _ in self]
@@ -111,7 +111,7 @@ class Bucketer(Configurable):
     
   #=============================================================
   def recenter(self):
-    """"""
+    """ """
     
     for idx in range(len(self)-1):
       split = self[idx]
@@ -143,7 +143,7 @@ class Bucketer(Configurable):
   
   #=============================================================
   def size(self):
-    """"""
+    """ """
     
     size = 0
     idx = 0
@@ -155,7 +155,7 @@ class Bucketer(Configurable):
   
   #=============================================================
   def plot(self, use_poisson=False):
-    """"""
+    """ """
     
     x = np.array(list(self.len2cnt.keys()), dtype=np.float32)
     y = np.array(list(self.len2cnt.values()), dtype=np.float32)
@@ -245,7 +245,7 @@ class Bucketer(Configurable):
   
 #***************************************************************
 if __name__ == '__main__':
-  """"""
+  """ """
   
   from parser import Configurable
   from parser.misc.bucketer import Bucketer

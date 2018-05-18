@@ -11,7 +11,7 @@ import numpy as np
 #***************************************************************
 #===============================================================
 def find_cycles(edges):
-  """"""
+  """ """
   
   vertices = np.arange(len(edges))
   indices = np.zeros_like(vertices) - 1
@@ -23,7 +23,7 @@ def find_cycles(edges):
   
   #-------------------------------------------------------------
   def strong_connect(vertex, current_index):
-    """"""
+    """ """
     
     indices[vertex] = current_index
     lowlinks[vertex] = current_index
@@ -57,20 +57,20 @@ def find_cycles(edges):
 
 #===============================================================
 def find_roots(edges):
-  """"""
+  """ """
   
   return np.where(edges[1:] == 0)[0]+1
   
 #***************************************************************
 def argmax(probs):
-  """"""
+  """ """
   
   edges = np.argmax(probs, axis=1)
   return edges
   
 #===============================================================
 def greedy(probs):
-  """"""
+  """ """
   
   edges = np.argmax(probs, axis=1)
   cycles = True
@@ -95,7 +95,7 @@ def greedy(probs):
 
 #===============================================================
 def chu_liu_edmonds(probs):
-  """"""
+  """ """
   
   vertices = np.arange(len(probs))
   edges = np.argmax(probs, axis=1)
@@ -143,7 +143,7 @@ def chu_liu_edmonds(probs):
 
 #===============================================================
 def nonprojective(probs):
-  """"""
+  """ """
   
   probs *= 1-np.eye(len(probs)).astype(np.float32)
   probs[0] = 0
@@ -168,7 +168,7 @@ def nonprojective(probs):
 
 #===============================================================
 def make_root(probs, root):
-  """"""
+  """ """
   
   probs = np.array(probs)
   probs[1:,0] = 0
@@ -179,7 +179,7 @@ def make_root(probs, root):
 
 #===============================================================
 def score_edges(probs, edges):
-  """"""
+  """ """
   
   return np.sum(np.log(probs[np.arange(1,len(probs)), edges[1:]]))
 

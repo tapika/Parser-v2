@@ -25,11 +25,11 @@ from parser.neural.optimizers.base_optimizer import BaseOptimizer
 
 #***************************************************************
 class SGDOptimizer(BaseOptimizer):
-  """"""
+  """ """
   
   #=============================================================
   def _apply_dense(self, cache):
-    """"""
+    """ """
     
     g_t = cache['g_t']
     cache['s_t'] = self.learning_rate * g_t
@@ -37,7 +37,7 @@ class SGDOptimizer(BaseOptimizer):
   
   #=============================================================
   def _apply_sparse(self, cache):
-    """"""
+    """ """
     
     g_t, idxs = cache['g_t'], cache['idxs']
     idxs, idxs_ = tf.unique(idxs)

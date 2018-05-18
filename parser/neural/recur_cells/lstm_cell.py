@@ -27,11 +27,11 @@ from parser.neural.functions import gate, tanh
 
 #***************************************************************
 class LSTMCell(BaseCell):
-  """"""
+  """ """
   
   #=============================================================
   def __call__(self, inputs, state, scope=None):
-    """"""
+    """ """
     
     with tf.variable_scope(scope or type(self).__name__):
       cell_tm1, hidden_tm1 = tf.split(state, 2, axis=1)

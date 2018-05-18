@@ -25,11 +25,11 @@ from parser.configurable import Configurable
 
 #***************************************************************
 class BaseCell(Configurable):
-  """"""
+  """ """
   
   #=============================================================
   def __init__(self, output_size, *args, **kwargs):
-    """"""
+    """ """
     
     self._output_size = output_size
     input_size = kwargs.pop('input_size', self._output_size)
@@ -39,13 +39,13 @@ class BaseCell(Configurable):
   
   #=============================================================
   def __call__(self, inputs, state, scope=None):
-    """"""
+    """ """
     
     raise NotImplementedError()
   
   #=============================================================
   def zero_state(self, batch_size, dtype):
-    """"""
+    """ """
     
     zero_state = tf.get_variable('Zero_state',
                                  shape=self.state_size,

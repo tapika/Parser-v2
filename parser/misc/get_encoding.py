@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright 2016 Timothy Dozat
 # 
@@ -26,7 +26,7 @@ import codecs
 encodings = ['utf-8', 'ascii']
 
 def get_encoding(filename):
-  """"""
+  """ """
   
   success = False
   for encoding in encodings:

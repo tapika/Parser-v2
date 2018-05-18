@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright 2016 Timothy Dozat
 # 
@@ -27,11 +27,11 @@ from parser.neural.models.embeds.base_embed import BaseEmbed
 
 #***************************************************************
 class RNNEmbed(BaseEmbed):
-  """"""
+  """ """
   
   #=============================================================
   def __call__(self, vocab, **kwargs):
-    """"""
+    """ """
     
     # (n x b x d)
     embeddings = super(RNNEmbed, self).__call__(vocab, **kwargs)

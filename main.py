@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright 2016 Timothy Dozat
 # 
@@ -48,7 +48,7 @@ with codecs.open('config/defaults.cfg') as f:
 # Train
 #---------------------------------------------------------------
 def train(save_dir, **kwargs):
-  """"""
+  """ """
   
   kwargs['config_file'] = kwargs.pop('config_file', '')
   load = kwargs.pop('load')
@@ -76,7 +76,7 @@ for section_name in section_names:
 # Parse
 #---------------------------------------------------------------
 def parse(save_dir, **kwargs):
-  """"""
+  """ """
   kwargs['config_file'] = os.path.join(save_dir, 'config.cfg')
   files = kwargs.pop('files')
   if not files:

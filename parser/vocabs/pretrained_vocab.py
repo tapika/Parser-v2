@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright 2016 Timothy Dozat
 # 
@@ -36,11 +36,11 @@ from parser.vocabs.base_vocab import BaseVocab
 
 #***************************************************************
 class PretrainedVocab(BaseVocab):
-  """"""
+  """ """
   
   #=============================================================
   def __init__(self, token_vocab, *args, **kwargs):
-    """"""
+    """ """
     
     super(PretrainedVocab, self).__init__(*args, **kwargs)
     
@@ -52,7 +52,7 @@ class PretrainedVocab(BaseVocab):
   
   #=============================================================
   def __call__(self, placeholder=None, moving_params=None):
-    """"""
+    """ """
     
     embeddings = super(PretrainedVocab, self).__call__(placeholder, moving_params=moving_params)
     # (n x b x d') -> (n x b x d)
@@ -67,7 +67,7 @@ class PretrainedVocab(BaseVocab):
   
   #=============================================================
   def setup(self):
-    """"""
+    """ """
 
     self.placeholder = None
     with tf.device('/cpu:0'):
@@ -77,7 +77,7 @@ class PretrainedVocab(BaseVocab):
     
   #=============================================================
   def load(self):
-    """"""
+    """ """
     
     embeddings = []
     cur_idx = len(self.special_tokens)
@@ -111,7 +111,7 @@ class PretrainedVocab(BaseVocab):
   
   #=============================================================
   def count(self):
-    """"""
+    """ """
     
     if self.token_vocab is not None:
       zipf = self.token_vocab.fit_to_zipf(plot=False)
@@ -143,7 +143,7 @@ class PretrainedVocab(BaseVocab):
 
 #***************************************************************
 if __name__ == '__main__':
-  """"""
+  """ """
   
   pretrained_vocab = PretrainedVocab(None)
   print('PretrainedVocab passes',file=sys.stderr)

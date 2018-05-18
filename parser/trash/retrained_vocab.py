@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright 2016 Timothy Dozat
 # 
@@ -32,11 +32,11 @@ from parser.vocabs.base_vocab import BaseVocab
 
 #***************************************************************
 class RetrainedVocab(BaseVocab):
-  """"""
+  """ """
   
   #=============================================================
   def __init__(self, pretrained_vocab, *args, **kwargs):
-    """"""
+    """ """
     
     super(RetrainedVocab, self).__init__(*args, **kwargs)
     
@@ -45,7 +45,7 @@ class RetrainedVocab(BaseVocab):
   
   #=============================================================
   def __call__(self):
-    """"""
+    """ """
     
     embed_size = self.embed_size
     row_idxs = tf.placeholder(tf.int32, shape=(None,), name='row_idxs')
@@ -75,7 +75,7 @@ class RetrainedVocab(BaseVocab):
   
   #=============================================================
   def dump(self):
-    """"""
+    """ """
     
     matrix = self.embeddings.eval()
     with codecs.open(self.name+'.txt', 'w') as f:
@@ -98,7 +98,7 @@ class RetrainedVocab(BaseVocab):
 
 #***************************************************************
 if __name__ == '__main__':
-  """"""
+  """ """
   
   from parser import Configurable
   from parser.vocabs import PretrainedVocab

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright 2016 Timothy Dozat
 # 
@@ -36,11 +36,11 @@ __all__ = ['Multivocab']
 
 #***************************************************************
 class Multivocab(Configurable):
-  """"""
+  """ """
   
   #=============================================================
   def __init__(self, vocabs, *args, **kwargs):
-    """"""
+    """ """
     
     super(Multivocab, self).__init__(*args, **kwargs)
     
@@ -52,7 +52,7 @@ class Multivocab(Configurable):
   
   #=============================================================
   def __call__(self, placeholder=None, moving_params=None):
-    """"""
+    """ """
     # TODO check to see if a word is all unk, and if so, replace it with a random vector
     
     embeddings = [vocab(moving_params=moving_params) for vocab in self]
@@ -60,7 +60,7 @@ class Multivocab(Configurable):
   
   #=============================================================
   def setup(self):
-    """"""
+    """ """
 
     self.placeholder = None
     for vocab in self:
@@ -69,7 +69,7 @@ class Multivocab(Configurable):
 
   #=============================================================
   def generate_placeholder(self):
-    """"""
+    """ """
     
     if self.placeholder is None:
       self.placeholder = tf.stack([vocab.generate_placeholder() for vocab in self], axis=2)
@@ -93,7 +93,7 @@ class Multivocab(Configurable):
   
   #=============================================================
   def add_files(self, conll_files):
-    """"""
+    """ """
     
     conll_files = list(conll_files)
     token_vocabs = []
@@ -106,7 +106,7 @@ class Multivocab(Configurable):
   
   #=============================================================
   def index_tokens(self):
-    """"""
+    """ """
     
     for vocab in self:
       if hasattr(vocab, 'index_tokens'):
@@ -115,7 +115,7 @@ class Multivocab(Configurable):
   
   #=============================================================
   def set_feed_dict(self, data, feed_dict):
-    """"""
+    """ """
     
     for i, vocab in enumerate(self):
       vocab.set_feed_dict(data[:,:,i], feed_dict)
@@ -152,7 +152,7 @@ class Multivocab(Configurable):
 
 #***************************************************************
 if __name__ == '__main__':
-  """"""
+  """ """
   
   from parser.vocabs import PretrainedVocab, WordVocab, CharVocab, Multivocab
   

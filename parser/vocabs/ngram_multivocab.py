@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright 2016 Timothy Dozat
 # 
@@ -37,11 +37,11 @@ __all__ = ['NgramMultivocab']
 
 #***************************************************************
 class NgramMultivocab(Multivocab, SubtokenVocab):
-  """"""
+  """ """
   
   #=============================================================
   def __init__(self, token_vocab, *args, **kwargs):
-    """"""
+    """ """
     
     super(BaseVocab, self).__init__(*args, **kwargs)
     self._cased = super(BaseVocab, self).cased
@@ -60,14 +60,14 @@ class NgramMultivocab(Multivocab, SubtokenVocab):
   
   #=============================================================
   def add_files(self, conll_files):
-    """"""
+    """ """
     
     self.token_vocab.count(conll_files)
     return
   
   #=============================================================
   def index_tokens(self):
-    """"""
+    """ """
     
     n_buckets = self.n_buckets
     tok2idxs = {token: [vocab.subtoken_indices(token) for vocab in self] for token in self.token_vocab.counts}
@@ -95,7 +95,7 @@ class NgramMultivocab(Multivocab, SubtokenVocab):
   
   #=============================================================
   def embedding_lookup(self, placeholders, embed_keep_prob=None, moving_params=None):
-    """"""
+    """ """
     
     if moving_params is None:
       shape = tf.shape(placeholders)
@@ -114,7 +114,7 @@ class NgramMultivocab(Multivocab, SubtokenVocab):
 
 #***************************************************************
 if __name__ == '__main__':
-  """"""
+  """ """
   
   from parser import Configurable
   from parser.vocabs import WordVocab, NgramMultivocab

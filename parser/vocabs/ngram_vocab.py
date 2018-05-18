@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright 2016 Timothy Dozat
 # 
@@ -34,11 +34,11 @@ __all__ = ['NgramVocab']
 
 #***************************************************************
 class NgramVocab(SubtokenVocab):
-  """"""
+  """ """
   
   #=============================================================
   def __init__(self, n, token_vocab, *args, **kwargs):
-    """"""
+    """ """
     
     recount = kwargs.pop('recount', False)
     initialize_zero = kwargs.pop('initialize_zero', False)
@@ -69,7 +69,7 @@ class NgramVocab(SubtokenVocab):
   
   #=============================================================
   def count(self):
-    """"""
+    """ """
     
     special_tokens = set(self.token_vocab.special_tokens)
     for token in self.token_vocab:
@@ -85,7 +85,7 @@ class NgramVocab(SubtokenVocab):
   
   #=============================================================
   def subtoken_indices(self, token):
-    """"""
+    """ """
     
     idxs = self.subtoken_vocab.subtoken_indices(token)
     idxs = [self.subtoken_vocab.START] + idxs + [self.subtoken_vocab.STOP]
@@ -124,7 +124,7 @@ class NgramVocab(SubtokenVocab):
 
 #***************************************************************
 if __name__ == '__main__':
-  """"""
+  """ """
   
   from parser import Configurable
   from parser.vocabs import WordVocab, CharVocab, NgramVocab

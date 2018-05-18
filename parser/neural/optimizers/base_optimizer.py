@@ -27,11 +27,11 @@ from parser.configurable import Configurable
 #***************************************************************
 # TODO needs to be updated
 class BaseOptimizer(Configurable):
-  """"""
+  """ """
   
   #=============================================================
   def __init__(self, *args, **kwargs):
-    """"""
+    """ """
     
     self._global_step = kwargs.pop('global_step', tf.Variable(0., trainable=False))
     super(BaseOptimizer, self).__init__(*args, **kwargs)
@@ -41,13 +41,13 @@ class BaseOptimizer(Configurable):
   
   #=============================================================
   def __call__(self, loss):
-    """"""
+    """ """
     
     return self.minimize(loss)
   
   #=============================================================
   def minimize(self, loss, name=None):
-    """"""
+    """ """
     
     # Error checking
     var_list = tf.trainable_variables()
@@ -90,7 +90,7 @@ class BaseOptimizer(Configurable):
   
   #=============================================================
   def _init_acc(self, var_list, grads):
-    """"""
+    """ """
     
     for x_tm1, g_t in zip(var_list, grads):
       if self.chi > 0:
@@ -105,7 +105,7 @@ class BaseOptimizer(Configurable):
   
   #=============================================================
   def _prepare(self, var_list, grads):
-    """"""
+    """ """
     
     caches = []
     for x_tm1, g_t in zip(var_list, grads):
@@ -114,13 +114,13 @@ class BaseOptimizer(Configurable):
 
   #=============================================================
   def _apply_dense(self, cache):
-    """"""
+    """ """
     
     raise NotImplementedError()
 
   #=============================================================
   def _apply_sparse(self, cache):
-    """"""
+    """ """
     
     raise NotImplementedError()
 
@@ -131,7 +131,7 @@ class BaseOptimizer(Configurable):
   
   #=============================================================
   def get_accumulator(self, x_tm1, acc_name, shape=None):
-    """"""
+    """ """
     
     if shape is None:
       shape = self.get_variable_shape(x_tm1)
@@ -158,7 +158,7 @@ class BaseOptimizer(Configurable):
   
   #=============================================================
   def _dense_moving_average(self, x_tm1, a_t, name, beta=.9):
-    """"""
+    """ """
     
     b_tm1 = self.get_accumulator(x_tm1, '%s' % name)
     tm1 = self.get_accumulator(x_tm1, '%s/tm1' % name, shape=[])
@@ -174,7 +174,7 @@ class BaseOptimizer(Configurable):
   
   #=============================================================
   def _sparse_moving_average(self, x_tm1, idxs, a_t_, name, beta=.9):
-    """"""
+    """ """
     
     b_tm1 = self.get_accumulator(x_tm1, '%s' % name)
     b_tm1_ = tf.gather(b_tm1, idxs)
@@ -194,7 +194,7 @@ class BaseOptimizer(Configurable):
     
   #=============================================================
   def _finish(self, caches):
-    """"""
+    """ """
     
     if self.clip > 0:
       S_t = [cache['s_t'] for cache in caches]
@@ -226,7 +226,7 @@ class BaseOptimizer(Configurable):
   
   #==============================================================
   def average(self, x_tm1):
-    """"""
+    """ """
     
     if 'x' in self._accumulators:
       return self._accumulators['x'].get(x_tm1, x_tm1)
@@ -235,13 +235,13 @@ class BaseOptimizer(Configurable):
   
   #==============================================================
   def average_name(self, x_tm1):
-    """"""
+    """ """
     
     return x_tm1.op.name + '/' + self.name + '/' + 'x'
   
   #==============================================================
   def variables_to_restore(self, moving_avg_variables=None):
-    """"""
+    """ """
     
     name_map = {}
     if moving_avg_variables is None:

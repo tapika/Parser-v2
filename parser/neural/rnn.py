@@ -26,7 +26,7 @@ import parser.neural.linalg as linalg
 
 #===============================================================
 def birnn(cell, inputs, sequence_length, initial_state_fw=None, initial_state_bw=None, ff_keep_prob=1., recur_keep_prob=1., dtype=tf.float32, scope=None):
-  """"""
+  """ """
   
   # Forward direction
   with tf.variable_scope(scope or 'BiRNN_FW') as fw_scope:
@@ -44,7 +44,7 @@ def birnn(cell, inputs, sequence_length, initial_state_fw=None, initial_state_bw
 
 #===============================================================
 def rnn(cell, inputs, sequence_length=None, initial_state=None, ff_keep_prob=1., recur_keep_prob=1., dtype=tf.float32, scope=None):
-  """"""
+  """ """
   
   inputs = tf.transpose(inputs, [1, 0, 2])  # (B,T,D) => (T,B,D)
   
@@ -96,7 +96,7 @@ def rnn(cell, inputs, sequence_length=None, initial_state=None, ff_keep_prob=1.,
     
     #-----------------------------------------------------------
     def _time_step(time, state, output_ta_t):
-      """"""
+      """ """
       
       input_t = input_ta.read(time)
       
