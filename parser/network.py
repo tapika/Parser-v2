@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
@@ -236,17 +237,30 @@ class Network(Configurable):
   #=============================================================
 
   @classmethod
-  def nonblocking_batches(cls,f=sys.stdin,timeout=0.2,batch_lines=10000):
+  def dummy_sents_hack(cls):
+    """Make five dummy sentences of five lengths"""
+    outp=[]
+    for sent_len in range(5,16):
+      outp.append("# Parserv2dummysentenceJHYSTGSH")
+      for wrd in range(1,sent_len+1):
+        outp.append("\t".join([str(wrd),"DUMMY","DUMMY","NOUN","NOUN","_",str(wrd-1),"nsubj","_","DUMMY"]))
+      outp.append("")
+    return "\n".join(outp)+"\n"
+  
+  @classmethod
+  def nonblocking_batches(cls,f=sys.stdin,timeout=0.2,batch_lines=150000):
     """Yields batches of the input (as string), always ending with an empty line.
        Batch is formed when at least batch_lines are read, or when no input is seen in timeour seconds
        Stops yielding when f is closed"""
+    dummies=cls.dummy_sents_hack()
     line_buffer=[]
     while True:
         ready_to_read=select.select([f], [], [], timeout)[0] #check whether f is ready to be read, wait at least timeout (otherwise we run a crazy fast loop)
         if not ready_to_read:
             # Stdin is not ready, yield what we've got, if anything
             if line_buffer:
-                yield "".join(line_buffer)
+                #print("Yielding",len(list(line for line in line_buffer if line.startswith("1\t"))), file=sys.stderr)
+                yield dummies+"".join(line_buffer)
                 line_buffer=[]
             continue #next try
         
@@ -256,7 +270,9 @@ class Network(Configurable):
             line=f.readline()
             if not line: #End of file detected --- I guess :D
                 if line_buffer:
-                    yield "".join(line_buffer)
+                    #print("Yielding2",len(list(line for line in line_buffer if line.startswith("1\t"))), file=sys.stderr)
+#                    print((dummies+"".join(line_buffer))[:10000],file=sys.stderr)
+                    yield dummies+"".join(line_buffer)
                     return
             line_buffer.append(line)
             if not line.strip(): #empty line
@@ -264,7 +280,8 @@ class Network(Configurable):
 
         # Now we got the next sentence --- do we have enough to yield?
         if len(line_buffer)>batch_lines:
-            yield "".join(line_buffer) #got plenty
+            #print("Yielding3",len(list(line for line in line_buffer if line.startswith("1\t"))), file=sys.stderr)
+            yield dummies+"".join(line_buffer) #got plenty
             line_buffer=[]
 
 

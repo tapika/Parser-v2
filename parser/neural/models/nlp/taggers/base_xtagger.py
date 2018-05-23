@@ -151,6 +151,8 @@ class BaseXTagger(NN):
       xtag_preds = np.argmax(xtag_prob, axis=1)
       sent_meta=metadata[meta_idx]
       if sent_meta["comments"]:
+        if "Parserv2dummysentenceJHYSTGSH" in sent_meta["comments"][0]:
+          continue
         f.write("\n".join(sent_meta["comments"]))
         f.write("\n")
       for tok_idx,(token, tag_pred, xtag_pred, weight) in enumerate(zip(sent, tag_preds[1:], xtag_preds[1:], weights[1:])):

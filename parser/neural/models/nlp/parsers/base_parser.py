@@ -161,6 +161,8 @@ class BaseParser(NN):
       rel_preds = np.argmax(np.einsum('nrb,nb->nr', rel_prob, arc_preds_one_hot), axis=1)
       sent_meta=metadata[meta_idx]
       if sent_meta["comments"]:
+        if "Parserv2dummysentenceJHYSTGSH" in sent_meta["comments"][0]:
+          continue
         f.write("\n".join(sent_meta["comments"]))
         f.write("\n")
       for tok_idx,(token, arc_pred, rel_pred, weight) in enumerate(zip(sent, arc_preds[1:], rel_preds[1:], weights[1:])):
