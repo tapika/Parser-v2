@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright 2016 Timothy Dozat
 # 
@@ -31,14 +31,14 @@ from parser.neural.models.nn import NN
 
 #***************************************************************
 class BaseXTagger(NN):
-  """"""
+  """ """
   
   PAD = 0
   ROOT = 1
   
   #=============================================================
   def __call__(self, vocabs, moving_params=None):
-    """"""
+    """ """
     
     self.moving_params = moving_params
     if isinstance(vocabs, dict):
@@ -68,7 +68,7 @@ class BaseXTagger(NN):
   
   #=============================================================
   def process_accumulators(self, accumulators, time=None):
-    """"""
+    """ """
     
     n_tokens, n_seqs, loss, corr, xcorr, seq_corr = accumulators
     acc_dict = {
@@ -86,7 +86,7 @@ class BaseXTagger(NN):
   
   #=============================================================
   def update_history(self, history, accumulators):
-    """"""
+    """ """
     
     acc_dict = self.process_accumulators(accumulators)
     for key, value in acc_dict.items():
@@ -95,7 +95,7 @@ class BaseXTagger(NN):
   
   #=============================================================
   def print_accuracy(self, accumulators, time, prefix='Train'):
-    """"""
+    """ """
     
     acc_dict = self.process_accumulators(accumulators, time=time)
     strings = []
@@ -110,13 +110,13 @@ class BaseXTagger(NN):
   
   #=============================================================
   def plot(self, history, prefix='Train'):
-    """"""
+    """ """
     
     pass
   
   #=============================================================
   def check(self, preds, sents, fileobj):
-    """"""
+    """ """
 
     for tokens, preds, xpreds in zip(sents, preds[0], preds[1]):
       for token, pred, xpred in zip(list(zip(*tokens)), preds, xpreds):

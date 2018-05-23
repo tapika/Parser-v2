@@ -25,11 +25,11 @@ from parser.neural.optimizers.base_optimizer import BaseOptimizer
 
 #***************************************************************
 class RadamOptimizer(BaseOptimizer):
-  """"""
+  """ """
   
   #=============================================================
   def _init_acc(self, var_list, grads):
-    """"""
+    """ """
     
     super(RadamOptimizer, self)._init_acc(var_list, grads)
     for x_tm1, g_t in zip(var_list, grads):
@@ -51,7 +51,7 @@ class RadamOptimizer(BaseOptimizer):
   
   #=============================================================
   def _apply_dense(self, cache):
-    """"""
+    """ """
     
     x_tm1, g_t = cache['x_tm1'], cache['g_t']
     updates = cache['updates']
@@ -76,7 +76,7 @@ class RadamOptimizer(BaseOptimizer):
   
   #=============================================================
   def _apply_sparse(self, cache):
-    """"""
+    """ """
     
     x_tm1, g_t, idxs = cache['x_tm1'], cache['g_t'], cache['idxs']
     idxs, idxs_ = tf.unique(idxs)

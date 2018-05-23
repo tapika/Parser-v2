@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright 2016 Timothy Dozat
 # 
@@ -32,11 +32,11 @@ from parser import Configurable
 
 #***************************************************************
 class BaseVocab(Configurable):
-  """"""
+  """ """
   
   #=============================================================
   def __init__(self, *args, **kwargs):
-    """"""
+    """ """
     
     super(BaseVocab, self).__init__(*args, **kwargs)
     
@@ -70,14 +70,14 @@ class BaseVocab(Configurable):
   #=============================================================
   @classmethod
   def from_vocab(cls, vocab, *args, **kwargs):
-    """"""
+    """ """
     
     args += (vocab,)
     return cls.from_configurable(vocab, *args, **kwargs)
  
   #=============================================================
   def generate_placeholder(self):
-    """"""
+    """ """
     
     if self.placeholder is None:
       self.placeholder = tf.placeholder(tf.int32, shape=[None, None], name=self.name)
@@ -85,7 +85,7 @@ class BaseVocab(Configurable):
   
   #=============================================================
   def __call__(self, placeholder=None, moving_params=None):
-    """"""
+    """ """
     
     placeholder = self.generate_placeholder() if placeholder is None else placeholder
     embeddings = self.embeddings if moving_params is None else moving_params.average(self.embeddings)
@@ -93,14 +93,14 @@ class BaseVocab(Configurable):
   
   #=============================================================
   def setup(self):
-    """"""
+    """ """
 
     self.placeholder = None
     return
 
   #=============================================================
   def set_feed_dict(self, data, feed_dict):
-    """"""
+    """ """
     
     feed_dict[self.placeholder] = data
     return
@@ -210,7 +210,7 @@ class BaseVocab(Configurable):
   
 #***************************************************************
 if __name__ == '__main__':
-  """"""
+  """ """
   
   base_vocab = BaseVocab()
   print('BaseVocab passes',file=sys.stderr)

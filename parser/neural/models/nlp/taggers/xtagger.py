@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright 2016 Timothy Dozat
 # 
@@ -26,11 +26,11 @@ from parser.neural.models.nlp.taggers.base_xtagger import BaseXTagger
 
 #***************************************************************
 class XTagger(BaseXTagger):
-  """"""
+  """ """
   
   #=============================================================
   def __call__(self, vocabs, moving_params=None):
-    """"""
+    """ """
     
     top_recur = super(XTagger, self).__call__(vocabs, moving_params=moving_params)
     int_tokens_to_keep = tf.to_int32(self.tokens_to_keep)

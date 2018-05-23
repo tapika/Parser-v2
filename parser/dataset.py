@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright 2016 Timothy Dozat
 # 
@@ -35,11 +35,11 @@ __all__ = ['Trainset', 'Parseset']
 
 #***************************************************************
 class Dataset(Configurable):
-  """"""
+  """ """
   
   #=============================================================
   def __init__(self, vocabs, *args, **kwargs):
-    """"""
+    """ """
     
     nlp_model = kwargs.pop('nlp_model', None)
     if "parse_files" in kwargs and isinstance(kwargs["parse_files"],io.StringIO): ### SPECIAL CASE - PARSING StringIO
@@ -77,13 +77,13 @@ class Dataset(Configurable):
   
   #=============================================================
   def __call__(self, moving_params=None):
-    """"""
+    """ """
     
     return self._nlp_model(self.vocabs, moving_params=moving_params)
   
   #=============================================================
   def iterfiles(self):
-    """"""
+    """ """
     #0 1    2     3     4     5     6    7     8     9
     ID,FORM,LEMMA,UPOS,XPOS,FEATS,HEAD,DEPREL,DEPS,MISC=range(10)
     if isinstance(self.preopen_parse_file,io.StringIO): #Go from here
@@ -122,7 +122,7 @@ class Dataset(Configurable):
   
   #=============================================================
   def iterbatches(self, shuffle=True, return_check=False):
-    """"""
+    """ """
     
     batch_size = self.batch_size
     batch_by = self.batch_by 
@@ -226,7 +226,7 @@ class Parseset(Dataset):
 
 #***************************************************************
 if __name__ == '__main__':
-  """"""
+  """ """
   
   from parser.vocabs import *
   from parser.dataset import Trainset

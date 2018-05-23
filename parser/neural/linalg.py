@@ -11,7 +11,7 @@ import tensorflow as tf
 
 #***************************************************************
 def orthonormal_initializer(input_size, output_size):
-  """"""
+  """ """
   
   if not tf.get_variable_scope().reuse:
     print(tf.get_variable_scope().name,file=sys.stderr)
@@ -39,7 +39,7 @@ def orthonormal_initializer(input_size, output_size):
 
 #===============================================================
 def linear(inputs, output_size, n_splits=1, add_bias=True, initializer=None, moving_params=None):
-  """"""
+  """ """
   
   # Prepare the input
   if not isinstance(inputs, (list, tuple)):
@@ -88,7 +88,7 @@ def linear(inputs, output_size, n_splits=1, add_bias=True, initializer=None, mov
   
 #===============================================================
 def bilinear(inputs1, inputs2, output_size, n_splits=1, add_bias1=True, add_bias2=True, initializer=None, moving_params=None):
-  """"""
+  """ """
   
   # Prepare the input
   if not isinstance(inputs1, (list, tuple)):
@@ -153,7 +153,7 @@ def bilinear(inputs1, inputs2, output_size, n_splits=1, add_bias1=True, add_bias
 
 #===============================================================
 def convolutional(inputs, window_size, output_size, n_splits=1, add_bias=True, initializer=None, moving_params=None):
-  """"""
+  """ """
   
   # Prepare the input
   if not isinstance(inputs, (list, tuple)):
@@ -204,7 +204,7 @@ def convolutional(inputs, window_size, output_size, n_splits=1, add_bias=True, i
   
 #===============================================================
 def random_mask(prob, mask_shape, dtype=tf.float32):
-  """"""
+  """ """
   
   rand = tf.random_uniform(mask_shape)
   ones = tf.ones(mask_shape, dtype=dtype)
@@ -214,7 +214,7 @@ def random_mask(prob, mask_shape, dtype=tf.float32):
 
 #===============================================================
 def random_where(prob, success, fail, keep_dims=None): 
-  """"""
+  """ """
   
   mask_shape = tf.shape(success)
   keep_dims = np.zeros(len(success.get_shape().as_list()), dtype=np.int32)

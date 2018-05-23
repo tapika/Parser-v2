@@ -26,11 +26,11 @@ from parser.neural.linalg import linear
 
 #***************************************************************
 class RNNCell(BaseCell):
-  """"""
+  """ """
   
   #=============================================================
   def __call__(self, inputs, state, scope=None):
-    """"""
+    """ """
     
     with tf.variable_scope(scope or type(self).__name__):
       inputs_list = [inputs, state]

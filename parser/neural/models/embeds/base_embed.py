@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright 2016 Timothy Dozat
 # 
@@ -27,11 +27,11 @@ from parser.neural.models import NN
 
 #***************************************************************
 class BaseEmbed(NN):
-  """"""
+  """ """
   
   #=============================================================
   def __init__(self, *args, **kwargs):
-    """"""
+    """ """
     
     super(BaseEmbed, self).__init__(*args, **kwargs)
     # This placeholder represents the data in the bucket that called BaseEmbed.__init__
@@ -45,7 +45,7 @@ class BaseEmbed(NN):
 
   #=============================================================
   def __call__(self, vocab, keep_prob=None, moving_params=None):
-    """"""
+    """ """
     
     self.moving_params = moving_params
     if isinstance(vocab, Multivocab):

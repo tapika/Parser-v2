@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright 2016 Timothy Dozat
 # 
@@ -35,11 +35,11 @@ __all__ = ['CharVocab']
 
 #***************************************************************
 class SubtokenVocab(TokenVocab):
-  """"""
+  """ """
   
   #=============================================================
   def __init__(self, token_vocab, *args, **kwargs):
-    """"""
+    """ """
     
     recount = kwargs.pop('recount', False)
     initialize_zero = kwargs.pop('initialize_zero', False)
@@ -69,7 +69,7 @@ class SubtokenVocab(TokenVocab):
   
   #=============================================================
   def setup(self):
-    """"""
+    """ """
 
     self.placeholder = None
     with tf.device('/cpu:0'):
@@ -80,7 +80,7 @@ class SubtokenVocab(TokenVocab):
 
   #=============================================================
   def __call__(self, placeholder=None, moving_params=None):
-    """"""
+    """ """
     
     placeholder = self.generate_placeholder() if placeholder is None else placeholder
     embeddings = self.multibucket(self, keep_prob=self.embed_keep_prob, moving_params=moving_params)
@@ -88,7 +88,7 @@ class SubtokenVocab(TokenVocab):
   
   #=============================================================
   def count(self):
-    """"""
+    """ """
     
     special_tokens = set(self.token_vocab.special_tokens)
     for token in self.token_vocab.counts:
@@ -99,7 +99,7 @@ class SubtokenVocab(TokenVocab):
   
   #=============================================================
   def load(self):
-    """"""
+    """ """
     
     train_file = os.path.join(self.save_dir, self.name+'.txt')
     with codecs.open(train_file, encoding='utf-8') as f:
@@ -117,7 +117,7 @@ class SubtokenVocab(TokenVocab):
   
   #=============================================================
   def dump(self):
-    """"""
+    """ """
     
     with codecs.open(os.path.join(self.save_dir, self.name+'.txt'), 'w', encoding='utf-8') as f:
       for token, count in self.sorted_counts(self._counts):
@@ -126,13 +126,13 @@ class SubtokenVocab(TokenVocab):
   
   #=============================================================
   def subtoken_indices(self, token):
-    """"""
+    """ """
     
     return self[list(token)]
   
   #=============================================================
   def index_tokens(self):
-    """"""
+    """ """
     
     self._tok2idx = {}
     tok2idxs = {token: self.subtoken_indices(token) for token in self.token_vocab.counts}
@@ -150,7 +150,7 @@ class SubtokenVocab(TokenVocab):
   
   #=============================================================
   def set_feed_dict(self, data, feed_dict):
-    """"""
+    """ """
     
     uniq, inv = np.unique(data, return_inverse=True)
     # this placeholder stores the indices into the new, on-the-fly embedding matrix
@@ -219,7 +219,7 @@ class CharVocab(SubtokenVocab):
 
 #***************************************************************
 if __name__ == '__main__':
-  """"""
+  """ """
   
   from parser import Configurable
   from parser.vocabs import WordVocab, CharVocab

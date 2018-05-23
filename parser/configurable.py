@@ -38,11 +38,11 @@ except ImportError:
 
 #***************************************************************
 class Configurable(object):
-  """"""
+  """ """
   
   #=============================================================
   def __init__(self, *args, **kwargs):
-    """"""
+    """ """
     
     if args:
       if len(args) > 1:
@@ -69,7 +69,7 @@ class Configurable(object):
   
   #=============================================================
   def _configure(self, *args, **kwargs):
-    """"""
+    """ """
     
     config = SafeConfigParser()
     if args:
@@ -107,7 +107,7 @@ class Configurable(object):
   #=============================================================
   @classmethod
   def from_configurable(cls, configurable, *args, **kwargs):
-    """"""
+    """ """
     
     args += (configurable._config,)
     return cls(*args, **kwargs)
@@ -404,7 +404,7 @@ class Configurable(object):
 
 #***************************************************************
 if __name__ == '__main__':
-  """"""
+  """ """
   
   config = Configurable()
   print('Configurable passes',file=sys.stderr)

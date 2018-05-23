@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright 2016 Timothy Dozat
 # 
@@ -32,14 +32,14 @@ from parser.neural.models.nn import NN
 
 #***************************************************************
 class BaseParser(NN):
-  """"""
+  """ """
   
   PAD = 0
   ROOT = 1
   
   #=============================================================
   def __call__(self, vocabs, moving_params=None):
-    """"""
+    """ """
     
     self.moving_params = moving_params
     if isinstance(vocabs, dict):
@@ -70,7 +70,7 @@ class BaseParser(NN):
   
   #=============================================================
   def process_accumulators(self, accumulators, time=None):
-    """"""
+    """ """
     
     n_tokens, n_seqs, loss, rel_corr, arc_corr, corr, seq_corr = accumulators
     acc_dict = {
@@ -89,7 +89,7 @@ class BaseParser(NN):
   
   #=============================================================
   def update_history(self, history, accumulators):
-    """"""
+    """ """
     
     acc_dict = self.process_accumulators(accumulators)
     for key, value in acc_dict.items():
@@ -98,7 +98,7 @@ class BaseParser(NN):
   
   #=============================================================
   def print_accuracy(self, accumulators, time, prefix='Train'):
-    """"""
+    """ """
     
     acc_dict = self.process_accumulators(accumulators, time=time)
     strings = []
@@ -114,13 +114,13 @@ class BaseParser(NN):
   
   #=============================================================
   def plot(self, history, prefix='Train'):
-    """"""
+    """ """
     
     pass
   
   #=============================================================
   def check(self, preds, sents, fileobj):
-    """"""
+    """ """
 
     for tokens, arc_preds, rel_preds in zip(sents, preds[0], preds[1]):
       for token, arc_pred, rel_pred in zip(list(zip(*tokens)), arc_preds, rel_preds):
@@ -132,7 +132,7 @@ class BaseParser(NN):
 
   #=============================================================
   def write_probs(self, sents, output_file, probs, inv_idxs, metadata):
-    """"""
+    """ """
     
     #parse_algorithm = self.parse_algorithm 
     

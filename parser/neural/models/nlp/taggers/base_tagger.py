@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright 2016 Timothy Dozat
 # 
@@ -31,14 +31,14 @@ from parser.neural.models.nn import NN
 
 #***************************************************************
 class BaseTagger(NN):
-  """"""
+  """ """
   
   PAD = 0
   ROOT = 1
   
   #=============================================================
   def __call__(self, vocabs, moving_params=None):
-    """"""
+    """ """
     
     self.moving_params = moving_params
     if isinstance(vocabs, dict):
@@ -68,7 +68,7 @@ class BaseTagger(NN):
   
   #=============================================================
   def process_accumulators(self, accumulators, time=None):
-    """"""
+    """ """
     
     n_tokens, n_seqs, loss, corr, seq_corr = accumulators
     acc_dict = {
@@ -85,7 +85,7 @@ class BaseTagger(NN):
   
   #=============================================================
   def update_history(self, history, accumulators):
-    """"""
+    """ """
     
     acc_dict = self.process_accumulators(accumulators)
     for key, value in acc_dict.items():
@@ -94,7 +94,7 @@ class BaseTagger(NN):
   
   #=============================================================
   def print_accuracy(self, accumulators, time, prefix='Train'):
-    """"""
+    """ """
     
     acc_dict = self.process_accumulators(accumulators, time=time)
     strings = []
@@ -108,13 +108,13 @@ class BaseTagger(NN):
   
   #=============================================================
   def plot(self, history, prefix='Train'):
-    """"""
+    """ """
     
     pass
   
   #=============================================================
   def check(self, preds, sents, fileobj):
-    """"""
+    """ """
 
     for tokens, preds in zip(sents, preds[0]):
       for token, pred in zip(list(zip(*tokens)), preds):
@@ -125,7 +125,7 @@ class BaseTagger(NN):
 
   #=============================================================
   def write_probs(self, sents, output_file, probs, inv_idxs, metadata):
-    """"""
+    """ """
     
     # Turns list of tuples of tensors into list of matrices
     tag_probs = [tag_prob for batch in probs for tag_prob in batch[0]]

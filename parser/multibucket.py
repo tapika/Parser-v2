@@ -29,11 +29,11 @@ from parser.misc.colors import ctext
 
 #***************************************************************
 class Multibucket(Configurable):
-  """"""
+  """ """
   
   #=============================================================
   def __init__(self, *args, **kwargs):
-    """"""
+    """ """
     
     self._embed_model = kwargs.pop('embed_model', None)
     super(Multibucket, self).__init__(*args, **kwargs)
@@ -46,7 +46,7 @@ class Multibucket(Configurable):
   
   #=============================================================
   def __call__(self, vocab, keep_prob=None, moving_params=None):
-    """"""
+    """ """
     
     # This placeholder is used to ensure the bucket data is in the right order
     reuse = None if moving_params is None else True
@@ -68,7 +68,7 @@ class Multibucket(Configurable):
 
   #=============================================================
   def generate_placeholder(self):
-    """"""
+    """ """
     
     if self.placeholder is None:
       self.placeholder = tf.placeholder(tf.int32, shape=(None,), name=self.name+'-multibucket')
@@ -76,7 +76,7 @@ class Multibucket(Configurable):
   
   #=============================================================
   def open(self, maxlens, depth=None):
-    """"""
+    """ """
     
     self._indices = [(0,0)]
     self._buckets = []
@@ -90,7 +90,7 @@ class Multibucket(Configurable):
   
   #=============================================================
   def add(self, idxs, tokens=None):
-    """"""
+    """ """
     
     if isinstance(self.indices, np.ndarray):
       raise TypeError("The buckets have already been closed, you can't add to them")
@@ -102,7 +102,7 @@ class Multibucket(Configurable):
   
   #=============================================================
   def close(self):
-    """"""
+    """ """
     
     for bucket in self:
       bucket.close()
@@ -112,20 +112,20 @@ class Multibucket(Configurable):
   
   #=============================================================
   def inv_idxs(self):
-    """"""
+    """ """
     
     return np.argsort(np.concatenate([np.where(self.indices['bkt_idx'][1:] == bkt_idx)[0] for bkt_idx in range(len(self))]))
   
   #=============================================================
   def get_tokens(self, bkt_idx, batch):
-    """"""
+    """ """
 
     return self[bkt_idx].get_tokens(batch)
 
   #=============================================================
   @classmethod
   def from_dataset(cls, dataset, *args, **kwargs):
-    """"""
+    """ """
     
     multibucket = cls.from_configurable(dataset, *args, **kwargs)
     indices = []

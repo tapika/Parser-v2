@@ -1,6 +1,6 @@
 
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright 2016 Timothy Dozat
 # 
@@ -46,11 +46,11 @@ import select
 
 #***************************************************************
 class Network(Configurable):
-  """"""
+  """ """
   
   #=============================================================
   def __init__(self, *args, **kwargs):
-    """"""
+    """ """
     
     super(Network, self).__init__(*args, **kwargs)
     # hacky!
@@ -83,7 +83,7 @@ class Network(Configurable):
   
   #=============================================================
   def add_file_vocabs(self, conll_files):
-    """"""
+    """ """
     
     # TODO don't depend on hasattr
     for vocab in self.vocabs:
@@ -96,7 +96,7 @@ class Network(Configurable):
   
   #=============================================================
   def setup_vocabs(self):
-    """"""
+    """ """
     
     for vocab in self.vocabs:
       vocab.setup()
@@ -104,7 +104,7 @@ class Network(Configurable):
   
   #=============================================================
   def train(self, load=False):
-    """"""
+    """ """
     
     # prep the configurables
     self.add_file_vocabs(self.parse_files)
@@ -291,7 +291,7 @@ class Network(Configurable):
     """
     if len(input_files)==1 and not isinstance(input_files[0],str): #Parsing from stdin, batching input
       inp=input_files[0]
-      self.parse((io.StringIO(batch) for batch in self.nonblocking_batches(f=inp)),None,sys.stdout)
+      self.parse((io.StringIO(batch) for batch in self.nonblocking_batches(f=inp,batch_lines=1000000)),None,sys.stdout)
       # for batch in self.nonblocking_batches(f=inp):
       #   #batch is a string (piece of the input) let's make it into more pallatable form
       #   pseudofile=io.StringIO(batch)
@@ -301,7 +301,7 @@ class Network(Configurable):
 
   
   def parse(self, input_files, output_dir=None, output_file=None):
-    """"""
+    """ """
 
     if isinstance(input_files, types.GeneratorType):
       pass
@@ -320,7 +320,8 @@ class Network(Configurable):
       with tf.Session(config=config_proto) as sess:
         # load the model and prep the parse set
 
-        self.add_file_vocabs(["/usr/share/ParseBank/TinyFinnish-Stanford-model/data/fi-ud-train.conllu"])
+        print("SELF.TRAIN_FILES",self.train_files,file=sys.stderr)
+        self.add_file_vocabs(self.train_files)
         self.setup_vocabs()
         trainset = Trainset.from_configurable(self, self.vocabs, nlp_model=self.nlp_model)
         with tf.variable_scope(self.name.title()):
@@ -401,7 +402,7 @@ class Network(Configurable):
 
 #***************************************************************
 if __name__ == '__main__':
-  """"""
+  """ """
   
   from parser import Network
   configurable = Configurable()

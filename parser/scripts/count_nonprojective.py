@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright 2016 Timothy Dozat
 # 
@@ -29,11 +29,11 @@ from collections import defaultdict
 
 #***************************************************************
 class DepTree:
-  """"""
+  """ """
   
   #=============================================================
   def __init__(self, buff):
-    """"""
+    """ """
     
     self._head2deps = defaultdict(list)
     self._dep2head = dict()
@@ -48,7 +48,7 @@ class DepTree:
   
   #=============================================================
   def count_nonprojective(self):
-    """"""
+    """ """
     
     nonproj = []
     for dep in self:
@@ -83,7 +83,7 @@ class DepTree:
   
 #***************************************************************
 if __name__ == '__main__':
-  """"""
+  """ """
   
   parser = argparse.ArgumentParser()
   parser.add_argument('files', nargs='+')

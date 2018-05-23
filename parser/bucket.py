@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright 2016 Timothy Dozat
 # 
@@ -26,11 +26,11 @@ from parser.configurable import Configurable
 
 #***************************************************************
 class Bucket(Configurable):
-  """"""
+  """ """
   
   #=============================================================
   def __init__(self, *args, **kwargs):
-    """"""
+    """ """
     
     embed_model = kwargs.pop('embed_model', None)
     super(Bucket, self).__init__(*args, **kwargs)
@@ -47,13 +47,13 @@ class Bucket(Configurable):
   
   #=============================================================
   def __call__(self, vocab, keep_prob=None, moving_params=None):
-    """"""
+    """ """
     
     return self.embed_model(vocab, keep_prob=keep_prob, moving_params=moving_params)
   
   #=============================================================
   def open(self, maxlen, depth=None):
-    """"""
+    """ """
     
     if depth is None:
       self._indices = [[0]]
@@ -66,7 +66,7 @@ class Bucket(Configurable):
   
   #=============================================================
   def add(self, idxs, tokens=None):
-    """"""
+    """ """
     
     if isinstance(self.indices, np.ndarray):
       raise TypeError("The bucket has already been closed, you can't add to it")
@@ -80,13 +80,13 @@ class Bucket(Configurable):
   
   #=============================================================
   def get_tokens(self, batch):
-    """"""
+    """ """
     
     return [self.tokens[sent_idx] for sent_idx in batch]
 
   #=============================================================
   def close(self):
-    """"""
+    """ """
     
     if self.depth is None:
       indices = np.zeros((len(self.indices), len(self)), dtype=np.int32)
@@ -102,7 +102,7 @@ class Bucket(Configurable):
   #=============================================================
   @classmethod
   def from_dataset(cls, dataset, bkt_idx, *args, **kwargs):
-    """"""
+    """ """
     
     kwargs = dict(kwargs)
     kwargs['name'] = '{name}-{bkt_idx}'.format(name=dataset.name, bkt_idx=bkt_idx)

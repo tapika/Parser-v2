@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 # Copyright 2016 Timothy Dozat
 # 
@@ -33,7 +33,7 @@ from collections import Counter
 
 #***************************************************************
 if __name__ == '__main__':
-  """"""
+  """ """
   
   parser = argparse.ArgumentParser()
   parser.add_argument('-k', '--k_trials', type=int, default=100)
