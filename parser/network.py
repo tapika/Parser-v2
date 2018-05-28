@@ -38,6 +38,8 @@ from parser.dataset import *
 from parser.misc.colors import ctext
 from parser.neural.optimizers import RadamOptimizer
 
+
+
 import types
 
 
@@ -259,7 +261,8 @@ class Network(Configurable):
         if not ready_to_read:
             # Stdin is not ready, yield what we've got, if anything
             if line_buffer:
-                #print("Yielding",len(list(line for line in line_buffer if line.startswith("1\t"))), file=sys.stderr)
+                print("Yielding",len(list(line for line in line_buffer if line.startswith("1\t"))), file=sys.stderr)
+                sys.stderr.flush()
                 yield dummies+"".join(line_buffer)
                 line_buffer=[]
             continue #next try
@@ -299,7 +302,6 @@ class Network(Configurable):
     else:
       self.parse(input_files, output_dir, output_file) #Normal operation as before
 
-  
   def parse(self, input_files, output_dir=None, output_file=None):
     """ """
 
@@ -376,6 +378,61 @@ class Network(Configurable):
         except:
           print(ctext('Parsing took {} seconds'.format(time.time()-start_time), 'bright_green'),file=sys.stderr)
     return
+
+  def parse_generator(self):
+    """ This is a (hacky) way to maintain everything loaded. Every time you call __next__() on this generator, it will parse data
+        found in self.current_input which should be an open file or StringIO"""
+
+    with tf.Graph().as_default():
+      config_proto = tf.ConfigProto()
+      if self.per_process_gpu_memory_fraction == -1:
+        config_proto.gpu_options.allow_growth = True
+      else:
+        config_proto.gpu_options.per_process_gpu_memory_fraction = self.per_process_gpu_memory_fraction
+      with tf.Session(config=config_proto) as sess:
+        # load the model and prep the parse set
+
+        print("SELF.TRAIN_FILES",self.train_files,file=sys.stderr)
+        self.add_file_vocabs(self.train_files)
+        self.setup_vocabs()
+        trainset = Trainset.from_configurable(self, self.vocabs, nlp_model=self.nlp_model)
+        with tf.variable_scope(self.name.title()):
+          train_tensors = trainset()
+        train_outputs = [train_tensors[train_key] for train_key in trainset.train_keys]
+
+        saver = tf.train.Saver(self.save_vars, max_to_keep=1)
+        for var in self.non_save_vars:
+          sess.run(var.initializer)
+        saver.restore(sess, tf.train.latest_checkpoint(self.save_dir))
+
+
+        while True:
+          self.add_file_vocabs([self.current_input])
+          parseset = Parseset.from_configurable(self, self.vocabs, parse_files=self.current_input, nlp_model=self.nlp_model)
+          with tf.variable_scope(self.name.title(), reuse=True):
+            parse_tensors = parseset(moving_params=self.optimizer)
+          parse_outputs = [parse_tensors[parse_key] for parse_key in parseset.parse_keys]
+
+
+          probs = []
+          sents = []
+          for feed_dict, tokens in parseset.iterbatches(shuffle=False):
+            probs.append(sess.run(parse_outputs, feed_dict=feed_dict))
+            sents.append(tokens)
+          outp=io.StringIO()
+          parseset.write_probs(sents, outp, probs, parseset._metadata)
+          yield outp.getvalue()
+          
+          del parseset
+      del trainset
+      if self.verbose:
+        try:
+          print(ctext('Parsing {0} file(s) took {1} seconds'.format(len(input_files), time.time()-start_time), 'bright_green'),file=sys.stderr)
+        except:
+          print(ctext('Parsing took {} seconds'.format(time.time()-start_time), 'bright_green'),file=sys.stderr)
+    return
+
+
   
   #=============================================================
   @property

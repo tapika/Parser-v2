@@ -174,7 +174,7 @@ class BaseParser(NN):
         token[7] = self.vocabs['rels'][rel_pred]
         f.write('\t'.join(token)+'\n')
       j += 1
-      if j < len(inv_idxs):
+      if j < len(inv_idxs) and sent: ### WHY DO I NEED TO ADD and sent?
         f.write('\n')
     if isinstance(output_file,str):
       output_file.close()

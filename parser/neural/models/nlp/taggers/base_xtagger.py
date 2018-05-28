@@ -163,7 +163,8 @@ class BaseXTagger(NN):
         token[3] = self.vocabs['tags'][tag_pred]
         token[4] = self.vocabs['xtags'][xtag_pred]
         f.write('\t'.join(token)+'\n')
-      f.write('\n')
+      if sent: #WHY DO I NEED THIS? CAN THERE BE AN EMPTY SENTENCE?
+        f.write('\n')
     f.flush()
     if close_out:
       f.close()

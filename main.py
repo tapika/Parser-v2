@@ -100,9 +100,11 @@ for section_name in section_names:
 parse_parser.add_argument('--output_file')
 parse_parser.add_argument('--output_dir')
 
+
 #***************************************************************
 # Parse the arguments
 kwargs = vars(argparser.parse_args())
+print("KWARGS",kwargs)
 action = kwargs.pop('action')
 save_dir = kwargs.pop('save_dir')
 kwargs = {key: value for key, value in kwargs.items() if value is not None}

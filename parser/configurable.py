@@ -94,13 +94,13 @@ class Configurable(object):
       if isinstance(arg, dict):
         section = config_sections[kw]
         for option, value in arg.items():
-          assert option in config_options
+          assert option in config_options, repr(option)
           config.set(section, option, str(value))
       else:
         option, value = kw, arg
         section = re.sub('\B([A-Z][a-z])', r' \1', self.__class__.__name__)
         section = re.sub('([a-z])([A-Z])', r'\1 \2', section)
-        assert option in config_options
+        assert option in config_options, (repr(option), repr(config_options))
         config.set(section, option, str(value))
     return config
   
