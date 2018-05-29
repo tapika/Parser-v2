@@ -53,7 +53,7 @@ def process_batch(data, detransfer=True):
                 token=transfer_token(token)
             lines.append("\t".join(token))
         lines.append("")
-    return("\n".join(lines))
+    return("\n".join(lines)+"\n")
 
 def main(args):
     for comm, sent in read_conllu(sys.stdin):
