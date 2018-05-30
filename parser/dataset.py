@@ -155,10 +155,14 @@ class Dataset(Configurable):
         indices = bucket.indices[batch]
         vocab.set_feed_dict(indices, feed_dict)
         if return_check:
+          #print("INDICES",indices.shape,indices)
           if len(indices.shape) == 2:
             tokens.append(vocab[indices])
           elif len(indices.shape) == 3:
-            tokens.extend([subvocab[indices[:,:,i]] for i, subvocab in enumerate(vocab)])
+            for i,subvocab in enumerate(vocab):
+              tokens.append(subvocab[indices[:,:,i]])
+              #print("SUBVOCAB",subvocab)
+            #tokens.extend([subvocab[indices[:,:,i]] for i, subvocab in enumerate(vocab)])
             # TODO This is super hacky
             if hasattr(subvocab, 'idx2tok'):
               tokens[-1] = [[subvocab.idx2tok.get(idx, subvocab[subvocab.PAD]) for idx in idxs] for idxs in indices[:,:,-1]]

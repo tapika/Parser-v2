@@ -197,7 +197,7 @@ class Network(Configurable):
               saver.save(sess, os.path.join(self.save_dir, self.name.lower()),
                          #global_step=self.global_epoch,
                          write_meta_graph=False)
-              with open(os.path.join(self.save_dir, 'history.pkl'), 'w') as f:
+              with open(os.path.join(self.save_dir, 'history.pkl'), 'wb') as f:
                 pkl.dump(dict(self.history), f)
             elif n_iters_since_improvement >= quit_after_n_iters_without_improvement and total_train_iters > min_train_iters:
               break
@@ -207,7 +207,7 @@ class Network(Configurable):
             saver.save(sess, os.path.join(self.save_dir, self.name.lower()),
                        #global_step=self.global_epoch,
                        write_meta_graph=False)
-            with open(os.path.join(self.save_dir, 'history.pkl'), 'w') as f:
+            with open(os.path.join(self.save_dir, 'history.pkl'), 'wb') as f:
               pkl.dump(dict(self.history), f)
           sess.run(self.global_epoch.assign_add(1.))
           continue
