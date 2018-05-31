@@ -143,10 +143,10 @@ class Network(Configurable):
     
     # start up the session
     config_proto = tf.ConfigProto()
-    if self.per_process_gpu_memory_fraction == -1:
-      config_proto.gpu_options.allow_growth = True
-    else:
-      config_proto.gpu_options.per_process_gpu_memory_fraction = self.per_process_gpu_memory_fraction
+    #if self.per_process_gpu_memory_fraction == -1:
+    config_proto.gpu_options.allow_growth = True
+    #else:
+    #  config_proto.gpu_options.per_process_gpu_memory_fraction = self.per_process_gpu_memory_fraction
     with tf.Session(config=config_proto) as sess:
       sess.run(tf.global_variables_initializer())
       if load:
@@ -231,7 +231,7 @@ class Network(Configurable):
         for feed_dict, tokens in parseset.iterbatches(shuffle=False):
           probs.append(sess.run(parse_outputs, feed_dict=feed_dict))
           sents.append(tokens)
-        parseset.write_probs(sents, os.path.join(output_dir, output_file), probs)
+        parseset.write_probs(sents, os.path.join(output_dir, output_file), probs, parseset._metadata)
     if self.verbose:
       print(ctext('Parsing {0} file(s) took {1} seconds'.format(len(input_files), time.time()-start_time), 'bright_green'),file=sys.stderr)
     return
