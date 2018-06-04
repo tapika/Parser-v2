@@ -27,6 +27,7 @@ with codecs.open(input_file, encoding='utf-8') as f:
         continue 
  
       if line[0] == '#': 
+        i += 1
         continue 
  
       line = line.split('\t') 
