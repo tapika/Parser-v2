@@ -142,13 +142,19 @@ class BaseTagger(NN):
           f.write("\n".join(sent_meta["comments"]))
           f.write("\n")
         for tok_idx,(token, tag_pred, weight) in enumerate(zip(sent, tag_preds[1:], weights[1:])):
+          for b,e in metadata["multiwordtokens"]:
+            if tok_idx+1==b: #there goes a multiword right here!
+              f.write("{}-{}".format(b,e))
+              f.write("\t_"*9)
+              f.write("\n")
           token = list(token)
           token.insert(5, sent_meta["feats"][tok_idx])
           token.append('_')
           token.append(sent_meta["miscfield"][tok_idx])
           token[3] = self.vocabs['tags'][tag_pred]
           f.write('\t'.join(token)+'\n')
-        f.write('\n')
+        if sent:
+          f.write('\n')
     return
   
   #=============================================================

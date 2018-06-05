@@ -97,22 +97,26 @@ class Dataset(Configurable):
         f=data_file
         
       buff = []
-      metadata = {"comments":[],"miscfield":[],"feats":[]}
+      metadata = {"comments":[],"miscfield":[],"feats":[],"multiwordtokens":[]}
       for line in f:
         line = line.strip()
         if line:
           if not line.startswith('#'):
-            if not re.match('[0-9]+[-.][0-9]+', line):
+            if not re.match('^[0-9]+[-.][0-9]+\t', line):
               cols=line.split("\t")
               metadata["miscfield"].append(cols[MISC])
               metadata["feats"].append(cols[FEATS])
               buff.append(cols)
+            elif re.match('^[0-9]+[-][0-9]+\t', line): #multiword token
+              cols=line.split("\t")
+              beg,end=cols[ID].split("-")
+              metadata["multiwordtokens"].append((int(beg),int(end),cols[FORM]))
           else:
             metadata["comments"].append(line)
         elif buff:
           yield buff, metadata
           buff = []
-          metadata = {"comments":[],"miscfield":[],"feats":[]}
+          metadata = {"comments":[],"miscfield":[],"feats":[],"multiwordtokens":[]}
       yield buff, metadata
 
       if isinstance(data_file,str):

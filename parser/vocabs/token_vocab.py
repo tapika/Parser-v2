@@ -92,7 +92,7 @@ class TokenVocab(BaseVocab):
           line = line.strip()
           if line and not line.startswith('#'):
             line = line.split('\t')
-            assert len(line) == 10
+            assert len(line) == 10, line
             token = line[self.conll_idx]
             if not self.cased:
               token = token.lower()

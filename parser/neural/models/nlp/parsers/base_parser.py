@@ -166,6 +166,11 @@ class BaseParser(NN):
         f.write("\n".join(sent_meta["comments"]))
         f.write("\n")
       for tok_idx,(token, arc_pred, rel_pred, weight) in enumerate(zip(sent, arc_preds[1:], rel_preds[1:], weights[1:])):
+        for b,e,form in sent_meta["multiwordtokens"]:
+            if tok_idx+1==b: #there goes a multiword right here!
+              f.write("{}-{}\t{}".format(b,e,form))
+              f.write("\t_"*8)
+              f.write("\n")
         token = list(token)
         token.insert(5, sent_meta["feats"][tok_idx])
         token.append('_')
