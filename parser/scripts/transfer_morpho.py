@@ -55,17 +55,17 @@ def process_batch(data, detransfer=True):
         lines.append("")
     return("\n".join(lines)+"\n")
 
-def main(args):
-    for comm, sent in read_conllu(sys.stdin):
+def main(detransfer, input_=sys.stdin, output_=sys.stdout):
+    for comm, sent in read_conllu(input_):
         for c in comm:
-            print(c)
+            print(c, file=output_)
         for token in sent:
-            if args.detransfer:
+            if detransfer:
                 token=detransfer_token(token)
             else:
                 token=transfer_token(token)
-            print("\t".join(token))
-        print()
+            print("\t".join(token), file=output_)
+        print(file=output_)
 
 
 if __name__=="__main__":
@@ -79,5 +79,5 @@ if __name__=="__main__":
     
     args = parser.parse_args()
 
-    main(args)
+    main(args.detransfer)
 
