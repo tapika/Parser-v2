@@ -142,6 +142,8 @@ class BaseParser(NN):
     tokens_to_keep = [weight for batch in probs for weight in batch[2]]
     tokens = [sent for batch in sents for sent in batch]
 
+
+    close_out=False
     if isinstance(output_file,str):
       f=codecs.open(output_file, 'w', encoding='utf-8', errors='ignore')
       close_out=True
@@ -181,9 +183,9 @@ class BaseParser(NN):
       j += 1
       if j < len(inv_idxs) and sent: ### WHY DO I NEED TO ADD and sent?
         f.write('\n')
-    if isinstance(output_file,str):
-      output_file.close()
-        
+    f.flush()
+    if close_out:
+        f.close()
     return
   
   #=============================================================
