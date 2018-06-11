@@ -147,6 +147,7 @@ class BaseXTagger(NN):
     for meta_idx,i in enumerate(inv_idxs):
       sent, tag_prob, xtag_prob, weights = tokens[i], tag_probs[i], xtag_probs[i], tokens_to_keep[i]
       sent = list(zip(*sent))
+      xtag_prob[:,self.vocabs['xtags']["UNK"]]=0.0 ## this masks UNK class probability and prevents Xtagger to produce unknown output (if input has min_occur_count set to 2 the tagger learns to predict unknown...)
       tag_preds = np.argmax(tag_prob, axis=1)
       xtag_preds = np.argmax(xtag_prob, axis=1)
       sent_meta=metadata[meta_idx]
