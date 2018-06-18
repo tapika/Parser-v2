@@ -1,4 +1,5 @@
 import sys
+import re
 
 ID,FORM,LEMMA,UPOS,XPOS,FEAT,HEAD,DEPREL,DEPS,MISC=range(10)
 
@@ -27,6 +28,35 @@ def transfer_token(token):
     token[XPOS]=new_xpos
     return token
 
+
+ud_feature=re.compile("^([A-Z0-9][A-Z0-9a-z]*(?:\[[a-z0-9]+\])?)=(([A-Z0-9][A-Z0-9a-z]*)(,([A-Z0-9][A-Z0-9a-z]*))*)$",re.U)
+def split_features(token):
+
+    xpos_column=[]
+    feats_column=[]
+    features=token[XPOS].split("|")
+    for i,f in enumerate(features):
+        if f.startswith("XPOS="):
+            _,f=f.split("=",1)
+            xpos_column.append(f)
+        elif f=="_":
+            if i==len(features)-1:
+                feats_column.append("_")
+            else:
+                print("weird underscore:",features,token,file=sys.stderr)
+                xpos_column.append(f)
+        elif re.match(ud_feature, f) is not None:
+            feats_column.append(f)
+        else:
+            if len(feats_column)!=0:
+                print("something not ud feature after already seeing one, putting it to features anyway:",features,token,file=sys.stderr)
+                feats_column.append(f)
+            else:
+                xpos_column.append(f)
+
+    return "|".join(xpos_column), "|".join(feats_column)
+
+
 def detransfer_token(token):
     if token[XPOS]=="_": # must be reinserted multiwordtoken
         token[FEAT]="_" # make sure it does not leak information
@@ -35,8 +65,14 @@ def detransfer_token(token):
         print("something weird:",token, file=sys.stderr)
         token[FEAT]="_"
         return token
-    xpos,feat=token[XPOS].split("|",1)
-    token[XPOS]=xpos.split("=",1)[1]
+    
+    xpos,feat=split_features(token)
+
+#    xpos,feat=token[XPOS].split("|",1)
+#    token[XPOS]=xpos.split("=",1)[1]
+#    token[FEAT]=feat
+
+    token[XPOS]=xpos
     token[FEAT]=feat
     return token
 
