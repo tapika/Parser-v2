@@ -66,11 +66,11 @@ def detransfer_token(token):
         token[FEAT]="_"
         return token
     
-    xpos,feat=split_features(token)
-
-#    xpos,feat=token[XPOS].split("|",1)
-#    token[XPOS]=xpos.split("=",1)[1]
-#    token[FEAT]=feat
+    if "_FEATS=" in token[XPOS]:
+        xpos,feat=token[XPOS].split("_FEATS=",1) #newstyle
+    else:
+        xpos,feat=split_features(token) #oldstyle, to be deprecated
+        
 
     token[XPOS]=xpos
     token[FEAT]=feat
