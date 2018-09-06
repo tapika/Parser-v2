@@ -8,14 +8,14 @@ This is the de facto directory for configuration files. There are a handful of t
       * class BaseXTagger -> [Base X Tagger]
       * class RNNEmbed -> [RNN Embed]
 * If class B inherits from class A, then any options for class B not present in section [B] will be inherited from section [A].
-* Options must be manually assigned a type (int, float, boolean, list) in `parser/configurable.py`, which basically everything in the codebase inherits from.
+* Options must be manually assigned a type (int, float, boolean, list) in `nparser/configurable.py`, which basically everything in the codebase inherits from.
 * list elements should be separated by colons
       * words:tags:xtags
       * /scr/tdozat/PTB/UD/train.conllu:/u/nlp/data/CoNLL17/UD_English/en-ud-train.conllu
 * (lists of) files support globbing
       * /scr/tdozat/PTB/UD/*.conllu
       * /scr/tdozat/PTB/UD/\*.conllu:/u/nlp/data/CoNLL17/UD_English/\*.conllu
-* 'None' is always `None` 
+* 'None' is always `None`
 
 ## Config Options
 ### Base
@@ -76,6 +76,6 @@ Class with essential neural functions, such as MLPs and attention
 
 * `recur_cell`: What kind of recurrent cell to use; must be the name of a BaseCell
 * `n_layers`: How many layers to use
-* `mlp_func`: Name of the nonlinearity to use; must exist in `parser/neural/functions.py`
+* `mlp_func`: Name of the nonlinearity to use; must exist in `nparser/neural/functions.py`
 
 (Under construction)
