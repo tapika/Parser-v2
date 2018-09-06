@@ -26,8 +26,8 @@ import sys
 import codecs
 from argparse import ArgumentParser
 
-from parser import Configurable
-from parser import Network
+from nparser import Configurable
+from nparser import Network
 
 # TODO make the pretrained vocab names a list given to TokenVocab
 #***************************************************************
