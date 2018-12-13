@@ -42,6 +42,7 @@ class Multibucket(Configurable):
     self._buckets = []
     self._len2idx = {}
     self.placeholder = None
+    self._embed_models = [] # place to keep embedding models to prevent reinitializing with every batch
     return
   
   #=============================================================
@@ -78,12 +79,20 @@ class Multibucket(Configurable):
   def open(self, maxlens, depth=None):
     """ """
     
+    # create rnn embedding models if needed
+    if len(self._embed_models)==0:
+      for idx, maxlen in enumerate(maxlens): # i.e. how many buckets there is
+        if self.embed_model != None:
+          self._embed_models.append(self.embed_model.from_configurable(self, name='%s-%d' % (self.name, idx))) # initialize embedding model, name is the bucket name
+        else:
+          self._embed_models.append(None)
+
     self._indices = [(0,0)]
     self._buckets = []
     self._len2idx = {}
     prevlen = -1
-    for idx, maxlen in enumerate(maxlens):
-      self._buckets.append(Bucket.from_configurable(self, embed_model=self.embed_model, name='%s-%d' % (self.name, idx)).open(maxlen, depth=depth))
+    for (idx, maxlen), bucket_embed_model in zip(enumerate(maxlens), self._embed_models):
+      self._buckets.append(Bucket.from_configurable(self, embed_model=bucket_embed_model, name='%s-%d' % (self.name, idx)).open(maxlen, depth=depth)) # use the same rnn embedding model instead of creating a new one
       self._len2idx.update(list(zip(list(range(prevlen+1, maxlen+1)), [idx]*(maxlen-prevlen))))
       prevlen = maxlen
     return self

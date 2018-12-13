@@ -405,13 +405,16 @@ class Network(Configurable):
           sess.run(var.initializer)
         saver.restore(sess, tf.train.latest_checkpoint(self.save_dir))
 
+        # create parseset outside of the while loop
+        parseset = Parseset.from_configurable(self, self.vocabs, parse_files=self.current_input, nlp_model=self.nlp_model)
+        with tf.variable_scope(self.name.title(), reuse=True):
+          parse_tensors = parseset(moving_params=self.optimizer)
+        parse_outputs = [parse_tensors[parse_key] for parse_key in parseset.parse_keys]
+
 
         while True:
-          self.add_file_vocabs([self.current_input])
-          parseset = Parseset.from_configurable(self, self.vocabs, parse_files=self.current_input, nlp_model=self.nlp_model)
-          with tf.variable_scope(self.name.title(), reuse=True):
-            parse_tensors = parseset(moving_params=self.optimizer)
-          parse_outputs = [parse_tensors[parse_key] for parse_key in parseset.parse_keys]
+          self.add_file_vocabs([self.current_input]) # add new vocubulary items from the current data
+          parseset.reinit(self.vocabs, self.current_input) # this creates new buckets for current data
 
 
           probs = []
@@ -423,7 +426,6 @@ class Network(Configurable):
           parseset.write_probs(sents, outp, probs, parseset._metadata)
           yield outp.getvalue()
           
-          del parseset
       del trainset
       if self.verbose:
         try:

@@ -74,6 +74,35 @@ class Dataset(Configurable):
     self._multibucket = Multibucket.from_dataset(self)
     
     return
+
+  #=============================================================
+  def reinit(self, vocabs, parse_files):
+    """ """
+    
+    self.preopen_parse_file=parse_files 
+    
+    self._vocabs = vocabs
+    self._multibuckets = [Multibucket.from_configurable(vocab, name='%s-%s'%(self.name, vocab.name)) for vocab in self.vocabs]
+    self._metadata=[]
+    
+    with Bucketer.from_configurable(self, self.n_buckets, name='bucketer-%s'%self.name) as bucketer:
+      splits = bucketer.compute_splits(len(sent) for sent,metadata in self.iterfiles())
+      for i in range(len(splits)):
+        splits[i] += 1
+    for multibucket, vocab in self.iteritems():
+      multibucket.open(splits, depth=vocab.depth)
+    for sent,metadata in self.iterfiles():
+      self._metadata.append(metadata)
+      for multibucket, vocab in self.iteritems():
+        tokens = [line[vocab.conll_idx] for line in sent]
+        idxs = [vocab.ROOT] + [vocab.index(token) for token in tokens]
+        multibucket.add(idxs, tokens)
+    for multibucket in self:
+      multibucket.close()
+    self._multibucket = Multibucket.from_dataset(self)
+    
+    return
+
   
   #=============================================================
   def __call__(self, moving_params=None):

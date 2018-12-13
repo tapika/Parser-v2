@@ -40,7 +40,8 @@ class Bucket(Configurable):
     self._depth = 1
     self._tokens = []
     if embed_model is not None:
-      self._embed_model = embed_model.from_configurable(self, name=self.name)
+      #self._embed_model = embed_model.from_configurable(self, name=self.name)
+      self._embed_model = embed_model # this will be initialized in the multibucket class
     else:
       self._embed_model = None
     return
