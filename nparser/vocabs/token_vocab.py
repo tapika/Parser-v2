@@ -53,6 +53,7 @@ class TokenVocab(BaseVocab):
       else:
         self.count()
         self.dump()
+    
     self.index_vocab()
     
     embed_dims = [len(self), self.embed_size]
@@ -77,7 +78,6 @@ class TokenVocab(BaseVocab):
   #=============================================================
   def count(self, conll_files=None):
     """ """
-    
     if conll_files is None:
       conll_files = self.train_files
     
@@ -107,7 +107,17 @@ class TokenVocab(BaseVocab):
 
     return
   
+
   #=============================================================
+  def prune_vocab(self):
+    """ Reload token vocab to prevent it growing too much """
+    self._counts=None
+    self.load()
+    return
+  
+  #=============================================================
+
+
   def load(self):
     """ """
     

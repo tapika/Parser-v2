@@ -95,6 +95,13 @@ class Network(Configurable):
       if hasattr(vocab, 'index_tokens'):
         vocab.index_tokens()
     return
+
+  def prune_vocabs(self):
+    """ """
+    for vocab in self.vocabs:
+      if hasattr(vocab, 'add_files'):
+        vocab.prune_vocab()
+    return
   
   #=============================================================
   def setup_vocabs(self):
@@ -411,8 +418,9 @@ class Network(Configurable):
           parse_tensors = parseset(moving_params=self.optimizer)
         parse_outputs = [parse_tensors[parse_key] for parse_key in parseset.parse_keys]
 
-
         while True:
+
+          self.prune_vocabs()
           self.add_file_vocabs([self.current_input]) # add new vocubulary items from the current data
           parseset.reinit(self.vocabs, self.current_input) # this creates new buckets for current data
 

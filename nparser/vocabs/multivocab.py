@@ -105,6 +105,16 @@ class Multivocab(Configurable):
     return
   
   #=============================================================
+  def prune_vocab(self):
+    """ """
+    for vocab in self:
+      if hasattr(vocab, 'prune_vocab'):
+        vocab.prune_vocab()
+    return
+  
+  #=============================================================
+
+
   def index_tokens(self):
     """ """
     
