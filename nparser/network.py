@@ -114,7 +114,6 @@ class Network(Configurable):
   #=============================================================
   def train(self, load=False):
     """ """
-    
     # prep the configurables
     self.add_file_vocabs(self.parse_files)
     self.setup_vocabs()

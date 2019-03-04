@@ -24,6 +24,7 @@ import re
 import os
 import sys
 import codecs
+import glob
 from argparse import ArgumentParser
 
 from nparser import Configurable
@@ -37,7 +38,7 @@ argparser.add_argument('--save_dir', required=True)
 subparsers = argparser.add_subparsers()
 section_names = set()
 # --section_name opt1=value1 opt2=value2 opt3=value3
-with codecs.open('config/defaults.cfg') as f:
+with codecs.open(os.path.dirname(os.path.realpath(__file__))+'/config/defaults.cfg') as f:
   section_regex = re.compile('\[(.*)\]')
   for line in f:
     match = section_regex.match(line)
@@ -54,12 +55,17 @@ def train(save_dir, **kwargs):
   load = kwargs.pop('load')
   try:
     if not load and os.path.isdir(save_dir):
-      input('Save directory already exists. Press <Enter> to continue or <Ctrl-c> to abort.')
-      if os.path.isfile(os.path.join(save_dir, 'config.cfg')):
-        os.remove(os.path.join(save_dir, 'config.cfg'))
+      files=glob.glob(os.path.join(save_dir, '*'))
+      for f in files:
+        print("Removing file",f)
+        os.remove(f)  
+      #raw_input('Save directory already exists. Press <Enter> to continue or <Ctrl-c> to abort.')
+      #if os.path.isfile(os.path.join(save_dir, 'config.cfg')):
+      #  os.remove(os.path.join(save_dir, 'config.cfg'))
   except KeyboardInterrupt:
     print(file=sys.stderr)
     sys.exit(0)
+
   network = Network(**kwargs)
   network.train(load=load)
   return
