@@ -62,7 +62,7 @@ class Bucketer(Configurable):
     
     # Initialize the splits evenly
     lengths = sorted([l for length, count in list(len2cnt.items()) for l in [length]*count])
-    self._splits = [np.max(split) for split in np.array_split(lengths, self.k)]
+    self._splits = [np.max(split) for split in np.array_split(self._lengths, self.k)]
     
     # Make sure all the splits are ordered correctly and present in the len2cnt
     idx = len(self)-1
