@@ -19,7 +19,7 @@
 
 
 
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 from nparser.neural.optimizers.base_optimizer import BaseOptimizer
 

@@ -30,7 +30,7 @@ from collections import defaultdict
 import os.path as op
 
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 from nparser import Configurable
 from nparser.vocabs import *
@@ -45,6 +45,8 @@ import types
 
 import io
 import select
+
+tf.disable_v2_behavior()
 
 #***************************************************************
 class Network(Configurable):
@@ -148,7 +150,7 @@ class Network(Configurable):
       self.history = {'train': defaultdict(list), 'valid': defaultdict(list)}
     
     # start up the session
-    config_proto = tf.ConfigProto()
+    config_proto = tf.compat.v1.ConfigProto()
     #if self.per_process_gpu_memory_fraction == -1:
     config_proto.gpu_options.allow_growth = True
     #else:

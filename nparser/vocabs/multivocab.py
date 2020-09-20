@@ -26,7 +26,7 @@ import codecs
 from collections import Counter
 
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 from nparser import Configurable
 from nparser.neural import linalg

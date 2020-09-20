@@ -21,7 +21,7 @@
 
 import sys
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 from nparser.neural import linalg
 from nparser.configurable import Configurable

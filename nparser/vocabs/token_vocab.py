@@ -26,12 +26,14 @@ import codecs
 from collections import Counter
 
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 from nparser.vocabs.base_vocab import BaseVocab
 from nparser.misc.zipf import Zipf
 
 __all__ = ['WordVocab', 'LemmaVocab', 'TagVocab', 'XTagVocab', 'RelVocab']
+
+tf.disable_v2_behavior()
 
 #***************************************************************
 class TokenVocab(BaseVocab):

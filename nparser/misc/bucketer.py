@@ -27,7 +27,7 @@ import numpy as np
 from scipy.optimize import curve_fit
 from scipy.stats import poisson, nbinom
 import matplotlib.pyplot as plt
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 from nparser import Configurable
 from nparser.misc.colors import ctext, color_pattern

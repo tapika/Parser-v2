@@ -26,7 +26,7 @@ from collections import Counter
 
 import numpy as np
 import scipy.linalg as la
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 from nparser.vocabs.base_vocab import BaseVocab
 

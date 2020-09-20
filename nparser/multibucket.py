@@ -21,11 +21,13 @@
 
 import sys
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 from nparser import Configurable
 from nparser import Bucket
 from nparser.misc.colors import ctext
+
+tf.disable_v2_behavior()
 
 #***************************************************************
 class Multibucket(Configurable):

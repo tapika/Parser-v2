@@ -20,7 +20,7 @@
 
 
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 from nparser.neural.models.nlp.taggers.base_xtagger import BaseXTagger
 

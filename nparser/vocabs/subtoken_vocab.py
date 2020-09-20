@@ -25,13 +25,15 @@ import codecs
 from collections import Counter
 
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 from nparser.vocabs import TokenVocab
 from nparser import Multibucket
 from nparser.misc.bucketer import Bucketer
 
 __all__ = ['CharVocab']
+
+tf.disable_v2_behavior()
 
 #***************************************************************
 class SubtokenVocab(TokenVocab):
